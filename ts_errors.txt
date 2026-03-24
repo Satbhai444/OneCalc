@@ -1,0 +1,10 @@
+app/calculators/emi.tsx(174,17): error TS1127: Invalid character.
+app/calculators/emi.tsx(174,37): error TS1002: Unterminated string literal.
+app/calculators/emi.tsx(175,5): error TS1005: ':' expected.
+app/calculators/emi.tsx(175,17): error TS1005: ',' expected.
+app/calculators/emi.tsx(175,21): error TS1005: ':' expected.
+app/calculators/split.tsx(210,17): error TS1127: Invalid character.
+app/calculators/split.tsx(210,37): error TS1002: Unterminated string literal.
+app/calculators/split.tsx(211,5): error TS1005: ':' expected.
+app/calculators/split.tsx(211,17): error TS1005: ',' expected.
+app/calculators/split.tsx(211,21): error TS1005: ':' expected.
