@@ -22,7 +22,10 @@
         "icon": "./assets/images/adaptive-icon.png",
         "color": "#4A90D9"
       },
-      "package": "com.darshansatbhai.OneCalc"
+      "package": "com.darshansatbhai.OneCalc",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "web": {
       "output": "static",
@@ -69,6 +72,9 @@
       "eas": {
         "projectId": "d9dab27f-ec5d-447f-962a-a3bfdddb6729"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/d9dab27f-ec5d-447f-962a-a3bfdddb6729"
     }
   }
 }
