@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Animated, Alert, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Modal, Animated, Alert, Dimensions } from 'react-native';
 import * as Updates from 'expo-updates';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useApp } from '../context/AppContext';
 
 const { width } = Dimensions.get('window');
 
 export const UpdateManager = () => {
-  const { isUpdateAvailable } = Updates.useUpdates();
+  const { isUpdateAvailable: isRemoteUpdateAvailable } = Updates.useUpdates();
+  const { 
+    setIsUpdateAvailable, 
+    isUpdateModalVisible, 
+    setUpdateModalVisible,
+    triggerHaptic 
+  } = useApp();
+  
   const [isDownloading, setIsDownloading] = useState(false);
   const [progress] = useState(new Animated.Value(0));
   const [percent, setPercent] = useState(0);
@@ -30,23 +38,23 @@ export const UpdateManager = () => {
     checkWhatsNew();
   }, []);
 
-  // 2. Handle Update Availability
+  // 2. Update Global State when update found
   useEffect(() => {
-    if (isUpdateAvailable) {
-      Alert.alert(
-        "Naya Update Available! 🚀",
-        "Ek naya update (Area & Volume upgrade) ready hai. Kya aap abhi download karna chahte hain?",
-        [
-          { text: "Baad Me", style: "cancel" },
-          { text: "Download Now", onPress: startDownload }
-        ]
-      );
+    if (isRemoteUpdateAvailable) {
+      setIsUpdateAvailable(true);
     }
-  }, [isUpdateAvailable]);
+  }, [isRemoteUpdateAvailable]);
+
+  // 3. React to Modal Trigger from Settings
+  useEffect(() => {
+    if (isUpdateModalVisible && !isDownloading) {
+      startDownload();
+    }
+  }, [isUpdateModalVisible]);
 
   const startDownload = async () => {
     setIsDownloading(true);
-    
+    triggerHaptic();
     // Smooth progress animation (0 to 90% simulated while downloading)
     Animated.timing(progress, {
       toValue: 0.9,
@@ -80,6 +88,7 @@ export const UpdateManager = () => {
     } catch (err) {
       console.error(err);
       setIsDownloading(false);
+      setUpdateModalVisible(false);
       Alert.alert("Error", "Update download failed. Please try again later.");
     } finally {
       progress.removeListener(listenerId);

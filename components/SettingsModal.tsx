@@ -13,7 +13,14 @@ interface SettingsModalProps {
 
 export default function SettingsModal({ visible, onClose, onOpenRating }: SettingsModalProps) {
   const router = useRouter();
-  const { themeMode, setThemeMode, isHapticEnabled, toggleHaptic, isSoundEnabled, toggleSound, isNotificationsEnabled, toggleNotifications, triggerHaptic } = useApp();
+  const { 
+    themeMode, setThemeMode, 
+    isHapticEnabled, toggleHaptic, 
+    isSoundEnabled, toggleSound, 
+    isNotificationsEnabled, toggleNotifications, 
+    triggerHaptic, colors: Colors,
+    isUpdateAvailable, setUpdateModalVisible
+  } = useApp();
 
   const handleNavigation = (path: string) => {
     onClose();
@@ -130,8 +137,26 @@ export default function SettingsModal({ visible, onClose, onOpenRating }: Settin
               </View>
               <View style={styles.row}>
                 <Text style={styles.label}>Version</Text>
-                <Text style={styles.value}>1.0.0</Text>
+                <View style={{flexDirection:'row', alignItems:'center', gap: 8}}>
+                  {isUpdateAvailable && <View style={styles.updateBadge}><Text style={styles.updateBadgeText}>NEW</Text></View>}
+                  <Text style={styles.value}>1.0.0</Text>
+                </View>
               </View>
+              {isUpdateAvailable && (
+                <TouchableOpacity 
+                   style={[styles.row, {backgroundColor: Colors.background + '50', borderRadius: 12, marginVertical: 4}]} 
+                   onPress={() => { triggerHaptic(); setUpdateModalVisible(true); }}
+                >
+                  <View style={styles.rowLeft}>
+                    <View style={styles.alertCircle}><MaterialIcons name="system-update" size={16} color="#FFFFFF" /></View>
+                    <View>
+                      <Text style={[styles.rowText, {color: '#00897B'}]}>Software Update Available</Text>
+                      <Text style={{fontSize: 11, color: Colors.textMuted, fontFamily: 'DMSans_400Regular'}}>Tap to download Area & Volume upgrade</Text>
+                    </View>
+                  </View>
+                  <MaterialIcons name="chevron-right" size={24} color="#00897B" />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity style={styles.row} onPress={() => handleNavigation('/about')}>
                 <Text style={styles.label}>Developer</Text>
                 <View style={[styles.rowLeft, { gap: 4 }]}>
@@ -229,5 +254,8 @@ const styles = StyleSheet.create({
   },
   label: { fontFamily: 'DMSans_400Regular', fontSize: 15, color: '#7A9BB5' },
   value: { fontFamily: 'DMSans_500Medium', fontSize: 15, color: '#0A1F44' },
-  footerText: { textAlign: 'center', fontFamily: 'DMSans_500Medium', fontSize: 13, color: '#7A9BB5', marginTop: 10, marginBottom: 30 }
+  footerText: { textAlign: 'center', fontFamily: 'DMSans_500Medium', fontSize: 13, color: '#7A9BB5', marginTop: 10, marginBottom: 30 },
+  updateBadge: { backgroundColor: '#FF3B30', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 6 },
+  updateBadgeText: { color: '#FFFFFF', fontSize: 10, fontFamily: 'DMSans_700Bold' },
+  alertCircle: { width: 28, height: 28, borderRadius: 14, backgroundColor: '#00897B', justifyContent: 'center', alignItems: 'center' }
 });

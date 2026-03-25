@@ -23,6 +23,10 @@ interface AppContextType {
   toggleFavorite: (id: string) => void;
   triggerHaptic: () => void;
   isLoaded: boolean;
+  isUpdateAvailable: boolean;
+  setIsUpdateAvailable: (val: boolean) => void;
+  isUpdateModalVisible: boolean;
+  setUpdateModalVisible: (val: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -113,6 +117,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
+  const [isUpdateModalVisible, setUpdateModalVisible] = useState(false);
+
   const effectiveTheme = themeMode === 'system' ? (systemColorScheme || 'light') : themeMode;
   const colors = effectiveTheme === 'dark' ? DarkTheme : LightTheme;
 
@@ -131,7 +138,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       toggleNotifications,
       toggleFavorite,
       triggerHaptic,
-      isLoaded
+      isLoaded,
+      isUpdateAvailable,
+      setIsUpdateAvailable,
+      isUpdateModalVisible,
+      setUpdateModalVisible
     }}>
       {children}
     </AppContext.Provider>

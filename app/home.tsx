@@ -15,7 +15,7 @@ export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [ratingVisible, setRatingVisible] = useState(false);
-  const { colors: Colors, favorites, toggleFavorite } = useApp();
+  const { colors: Colors, favorites, toggleFavorite, isUpdateAvailable } = useApp();
   const styles = getStyles(Colors);
 
   useEffect(() => {
@@ -97,7 +97,10 @@ export default function HomeScreen() {
             </View>
           </View>
           <TouchableOpacity style={styles.settingsBtn} onPress={() => setSettingsVisible(true)} activeOpacity={0.7}>
-            <MaterialCommunityIcons name="cog" size={28} color={Colors.text} />
+            <View>
+              <MaterialCommunityIcons name="cog" size={28} color={Colors.text} />
+              {isUpdateAvailable && <View style={styles.notifBadge} />}
+            </View>
           </TouchableOpacity>
         </View>
       </View>
@@ -163,6 +166,7 @@ const getStyles = (Colors: any) => StyleSheet.create({
   header: { paddingHorizontal: 20, paddingVertical: 16 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   settingsBtn: { padding: 8 },
+  notifBadge: { position: 'absolute', top: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF3B30', borderWidth: 2, borderColor: '#FFFFFF' },
   headerTitle: { fontFamily: 'DMSans_700Bold', fontSize: 32, color: Colors.text, letterSpacing: 0.5 },
   headerSubtitle: { fontFamily: 'DMSans_500Medium', fontSize: 16, color: Colors.textMuted, marginTop: 4 },
   listContainer: { paddingHorizontal: 12, paddingBottom: 20 },
