@@ -5,7 +5,7 @@ import { useFonts, DMSans_400Regular, DMSans_500Medium, DMSans_700Bold } from '@
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppProvider } from '../context/AppContext';
-import { useUpdateManager } from '../hooks/use-update-manager';
+import { UpdateManager } from '../hooks/use-update-manager';
 import * as Notifications from 'expo-notifications';
 
 SplashScreen.preventAutoHideAsync();
@@ -21,7 +21,6 @@ Notifications.setNotificationHandler({
 });
 
 export default function Layout() {
-  useUpdateManager();
   const [loaded, error] = useFonts({
     DMSans_400Regular,
     DMSans_500Medium,
@@ -40,6 +39,7 @@ export default function Layout() {
 
   return (
     <AppProvider>
+      <UpdateManager />
       <StatusBar style="dark" backgroundColor={Colors.background} />
       <Stack
         screenOptions={{
