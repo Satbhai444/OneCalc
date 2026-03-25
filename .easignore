@@ -1,0 +1,11 @@
+node_modules/
+.expo/
+.vscode/
+dist/
+/ios
+/android
+*.log
+build_log.json
+expo_output.txt
+ts_errors.txt
+qrcode.txt
