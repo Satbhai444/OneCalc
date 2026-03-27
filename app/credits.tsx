@@ -6,7 +6,7 @@ import Header from '../components/Header';
 
 export default function CreditsScreen() {
   const openLink = (url: string) => {
-    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+    Linking.openURL(url).catch(err => console.error("Couldn&apos;t load page", err));
   };
 
   return (
@@ -20,7 +20,7 @@ export default function CreditsScreen() {
         <View style={styles.pageHeader}>
           <Text style={styles.headerEmoji}>🏆</Text>
           <Text style={styles.headerTitle}>Credits</Text>
-          <Text style={styles.headerSubtitle}>OneCalc wouldn't exist without these amazing people and tools.</Text>
+          <Text style={styles.headerSubtitle}>OneCalc wouldn&apos;t exist without these amazing people and tools.</Text>
         </View>
 
         {/* SECTION 1 — CREATOR */}
@@ -79,7 +79,7 @@ export default function CreditsScreen() {
             </View>
           </View>
           <Text style={styles.bodyText}>
-            Claude AI assisted in the complete planning and strategy of OneCalc. From feature ideation to UI design decisions, color theme selection, UX rules, legal content, and every prompt that brought this app to life — Claude was the strategic backbone of OneCalc's development.
+            Claude AI assisted in the complete planning and strategy of OneCalc. From feature ideation to UI design decisions, color theme selection, UX rules, legal content, and every prompt that brought this app to life — Claude was the strategic backbone of OneCalc&apos;s development.
           </Text>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.linkRow} onPress={() => openLink('https://anthropic.com')}>
@@ -159,7 +159,7 @@ export default function CreditsScreen() {
             </View>
           </View>
           <Text style={styles.bodyText}>
-            OneCalc's unique color themes for all 12 calculator tools were crafted using Coolors — the super fast color palette generator. Each tool's accent color was carefully selected to be visually distinct yet harmonious.
+            OneCalc&apos;s unique color themes for all 12 calculator tools were crafted using Coolors — the super fast color palette generator. Each tool&apos;s accent color was carefully selected to be visually distinct yet harmonious.
           </Text>
           <View style={styles.divider} />
           <TouchableOpacity style={styles.linkRow} onPress={() => openLink('https://coolors.co')}>
@@ -172,7 +172,7 @@ export default function CreditsScreen() {
         <Text style={styles.sectionHeading}>💙 OPEN SOURCE LOVE</Text>
         <View style={styles.card}>
           <Text style={styles.bodyText}>
-            "OneCalc is built on the shoulders of giants. We are grateful to the entire open source community whose hard work and dedication made this app possible."
+            &quot;OneCalc is built on the shoulders of giants. We are grateful to the entire open source community whose hard work and dedication made this app possible.&quot;
           </Text>
           <Text style={[styles.bodyText, { marginTop: 12, fontFamily: 'DMSans_700Bold' }]}>Special thanks to:</Text>
           <View style={{marginTop: 8, gap: 4}}>
@@ -198,10 +198,10 @@ export default function CreditsScreen() {
 
         {/* FOOTER */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>OneCalc v1.0.0</Text>
+          <Text style={styles.footerText}>OneCalc v1.2.0</Text>
           <Text style={styles.footerText}>© 2026 Darshan Satbhai</Text>
           <Text style={styles.footerText}>All Rights Reserved</Text>
-          <Text style={[styles.footerText, { marginTop: 8, color: '#4A90D9', fontStyle: 'italic' }]}>"One App. For Every Calculation."</Text>
+          <Text style={[styles.footerText, { marginTop: 8, color: '#4A90D9', fontStyle: 'italic' }]}>&quot;One App. For Every Calculation.&quot;</Text>
         </View>
 
       </ScrollView>
@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
   
   linkRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   linkText: { fontFamily: 'DMSans_500Medium', fontSize: 14, color: '#4A90D9' },
+ 
 
   cardHeaderSmall: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 12 },
   cardTitleSmall: { fontFamily: 'DMSans_700Bold', fontSize: 16, color: '#0A1F44', marginBottom: 2 },

@@ -23,7 +23,7 @@ export default function PrivacyPolicy() {
 
         <Text style={styles.sectionTitle}>1. Introduction</Text>
         <Text style={styles.bodyText}>
-          OneCalc ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our mobile application OneCalc.
+          OneCalc (&quot;we&quot;, &quot;our&quot;, or &quot;us&quot;) is committed to protecting your privacy. This Privacy Policy explains how we handle information when you use our mobile application OneCalc.
         </Text>
 
         <Text style={styles.sectionTitle}>2. Information We Do NOT Collect</Text>
@@ -46,7 +46,7 @@ export default function PrivacyPolicy() {
           OneCalc does not use any third-party analytics, advertising, or tracking services.
         </Text>
 
-        <Text style={styles.sectionTitle}>6. Children's Privacy</Text>
+        <Text style={styles.sectionTitle}>6. Children&apos;s Privacy</Text>
         <Text style={styles.bodyText}>
           OneCalc is safe for all ages. We do not knowingly collect any information from children under 13.
         </Text>

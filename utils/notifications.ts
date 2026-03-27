@@ -114,6 +114,24 @@ export const scheduleHourlyNotifications = async () => {
   await AsyncStorage.setItem('@showed_notification_indices', JSON.stringify(showedIndices));
 };
 
+export const triggerUpdateNotificationV12 = async () => {
+  if (!(await checkNotificationsEnabled())) return;
+  
+  await Notifications.scheduleNotificationAsync({
+    identifier: 'v12_update_alert',
+    content: {
+      title: "🚀 OneCalc v1.2.0 is Here!",
+      body: "Real-time Currency Rates & 150+ Countries added! Update now for the most accurate calculations. ✨",
+      data: { url: '/about' } // Action to deep-link to About screen
+    },
+    trigger: {
+      type: 'timeInterval',
+      seconds: 5, // Show 5 seconds after launch
+      channelId: 'default'
+    } as any
+  });
+};
+
 export const scheduleToolNotification = async (toolId?: string) => {
   if (!(await checkNotificationsEnabled())) return;
   await scheduleHourlyNotifications();

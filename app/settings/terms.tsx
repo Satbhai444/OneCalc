@@ -38,7 +38,7 @@ export default function TermsOfUse() {
 
         <Text style={styles.sectionTitle}>4. Accuracy of Calculations</Text>
         <Text style={styles.bodyText}>
-          While we strive for accuracy, OneCalc's calculations should be used for reference purposes only. For critical financial or medical decisions, please consult a qualified professional.
+          While we strive for accuracy, OneCalc&apos;s calculations should be used for reference purposes only. For critical financial or medical decisions, please consult a qualified professional.
         </Text>
 
         <Text style={styles.sectionTitle}>5. Currency Rates</Text>
@@ -58,7 +58,7 @@ export default function TermsOfUse() {
 
         <Text style={styles.sectionTitle}>8. Disclaimer of Warranties</Text>
         <Text style={styles.bodyText}>
-          OneCalc is provided "as is" without any warranties of any kind, either express or implied.
+          OneCalc is provided &quot;as is&quot; without any warranties of any kind, either express or implied.
         </Text>
 
         <Text style={styles.sectionTitle}>9. Limitation of Liability</Text>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, SafeAreaView, Platform , Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, SafeAreaView, Platform, Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import * as Updates from 'expo-updates';
@@ -7,7 +7,7 @@ import Header from '../components/Header';
 
 export default function AboutDeveloperScreen() {
   const openLink = (url: string) => {
-    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
+    Linking.openURL(url).catch(err => console.error("Couldn&apos;t load page", err));
   };
 
   return (
@@ -41,7 +41,7 @@ export default function AboutDeveloperScreen() {
             <Text style={{fontSize: 18}}>🌐</Text> MY PORTFOLIO WEBSITE
           </Text>
           <Text style={styles.bodyText}>
-            Hi! I'm Darshan Satbhai, a passionate Prompt Engineer and AI-powered App Developer from Ahmedabad, India.
+            Hi! I&apos;m Darshan Satbhai, a passionate Prompt Engineer and AI-powered App Developer from Ahmedabad, India.
           </Text>
           <Text style={[styles.bodyText, { marginTop: 12 }]}>
             I invite you to explore my personal portfolio website — <Text style={{fontFamily: 'DMSans_700Bold', color: '#0A1F44'}}>daarshannexaa.in</Text>! 🚀
@@ -138,7 +138,6 @@ export default function AboutDeveloperScreen() {
           <TouchableOpacity 
             style={styles.updateBtn} 
             onPress={() => {
-              // Trigger update check via context/hook
               Updates.checkForUpdateAsync().then(res => {
                 if (res.isAvailable) {
                   Alert.alert("Update Available! 🚀", "Naya update mil gaya hai. Download karein?", [
@@ -150,7 +149,7 @@ export default function AboutDeveloperScreen() {
                 } else {
                   Alert.alert("Up to Date ✅", "Aapka app pehle se hi updated hai!");
                 }
-              }).catch(e => Alert.alert("Error", "Update check nahi ho paya."));
+              }).catch(() => Alert.alert("Error", "Update check nahi ho paya."));
             }}
           >
             <View style={styles.contactIconBg}>
@@ -278,51 +277,6 @@ const styles = StyleSheet.create({
     fontFamily: 'DMSans_500Medium',
     fontSize: 13,
     color: '#7A9BB5',
-  },
-
-  // Timeline (Edu)
-  timelineItem: {
-    position: 'relative',
-    paddingLeft: 20,
-  },
-  timelineDot: {
-    position: 'absolute',
-    left: 0,
-    top: 6,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#4A90D9',
-  },
-  itemTitle: {
-    fontFamily: 'DMSans_700Bold',
-    fontSize: 16,
-    color: '#0A1F44',
-    marginBottom: 4,
-  },
-  itemSub: {
-    fontFamily: 'DMSans_500Medium',
-    fontSize: 14,
-    color: '#7A9BB5',
-    marginBottom: 4,
-  },
-  itemMuted: {
-    fontFamily: 'DMSans_400Regular',
-    fontSize: 13,
-    color: '#94A3B8',
-    marginBottom: 8,
-  },
-  badge: {
-    backgroundColor: '#E0F2FE',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 8,
-    alignSelf: 'flex-start',
-  },
-  badgeText: {
-    fontFamily: 'DMSans_700Bold',
-    fontSize: 12,
-    color: '#0284C7',
   },
 
   // Skills

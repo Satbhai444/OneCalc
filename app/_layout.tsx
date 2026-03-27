@@ -6,8 +6,7 @@ import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppProvider } from '../context/AppContext';
 import { UpdateManager } from '../hooks/use-update-manager';
-import * as Notifications from 'expo-notifications';
-import { scheduleHourlyNotifications, scheduleDailyNotifications } from '../utils/notifications';
+import { scheduleHourlyNotifications, scheduleDailyNotifications, triggerUpdateNotificationV12 } from '../utils/notifications';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,6 +25,8 @@ export default function Layout() {
       // Initialize Hourly & Daily notifications on app launch
       scheduleHourlyNotifications();
       scheduleDailyNotifications();
+      // Urgent v1.2.0 Update Alert
+      triggerUpdateNotificationV12();
     }
   }, [loaded, error]);
 
