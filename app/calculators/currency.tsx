@@ -289,7 +289,7 @@ export default function CurrencyConverter() {
             <View style={{flex:1}}>
               <Text style={styles.label}>From</Text>
               <View style={styles.pickerWrapper}>
-                <Picker selectedValue={fromCurr} onValueChange={(v) => { triggerHaptic(); setFromCurr(v); }}>
+                <Picker selectedValue={fromCurr} onValueChange={(v: string) => { triggerHaptic(); setFromCurr(v); }}>
                   {CURRENCIES.map(c => <Picker.Item key={c.code} label={`${c.flag} ${c.code}`} value={c.code} />)}
                 </Picker>
               </View>
@@ -297,7 +297,7 @@ export default function CurrencyConverter() {
             <View style={{flex:1}}>
               <Text style={styles.label}>To</Text>
               <View style={styles.pickerWrapper}>
-                <Picker selectedValue={toCurr} onValueChange={(v) => { triggerHaptic(); setToCurr(v); }}>
+                <Picker selectedValue={toCurr} onValueChange={(v: string) => { triggerHaptic(); setToCurr(v); }}>
                   {CURRENCIES.map(c => <Picker.Item key={c.code} label={`${c.flag} ${c.code}`} value={c.code} />)}
                 </Picker>
               </View>

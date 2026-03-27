@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, Animated, Alert, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Modal, Animated, Alert, Dimensions, TouchableOpacity } from 'react-native';
 import * as Updates from 'expo-updates';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useApp } from '../context/AppContext';
@@ -15,6 +15,7 @@ export const UpdateManager = () => {
     triggerHaptic 
   } = useApp();
   
+  const [isWhatsNewVisible, setIsWhatsNewVisible] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
   const [progress] = useState(new Animated.Value(0));
   const [percent, setPercent] = useState(0);
@@ -22,21 +23,19 @@ export const UpdateManager = () => {
   // 1. Check for "What's New" on every startup
   useEffect(() => {
     const checkWhatsNew = async () => {
-      const currentId = Updates.updateId;
-      if (!currentId) return;
-
-      const savedId = await AsyncStorage.getItem('LAST_RUN_UPDATE_ID');
-      if (currentId !== savedId) {
-        Alert.alert(
-          "What's New! 🚀",
-          "• Real-Time Currency: Live Market Rates (INR Base)\n• Hourly Notifications: 50+ Unique Messages\n• Check for Update: Manual trigger added\n• Scientific Calc: Fixed Trig & Precision\n• Currency: 150+ Countries & Refresh Button\n• GST: Easy Labels & Share Breakdown\n• Age: Next Birthday Fix & Life Stats\n• Bill Splitter: Friend Names & Receipts\n• New Units: Data, Speed, Pressure, etc.\n• Number System: Real-time 4-Base UX",
-          [{ text: "Awesome!" }]
-        );
-        await AsyncStorage.setItem('LAST_RUN_UPDATE_ID', currentId);
+      // Logic: Show if v12_shown is null
+      const shown = await AsyncStorage.getItem('WHATS_NEW_V1.2.0_SHOWN');
+      if (!shown) {
+        setIsWhatsNewVisible(true);
       }
     };
     checkWhatsNew();
   }, []);
+
+  const closeWhatsNew = async () => {
+    setIsWhatsNewVisible(false);
+    await AsyncStorage.setItem('WHATS_NEW_V1.2.0_SHOWN', 'true');
+  };
 
   // 2. Update Global State when update found
   useEffect(() => {
@@ -63,7 +62,7 @@ export const UpdateManager = () => {
     }).start();
 
     // Track percent for text display
-    const listenerId = progress.addListener(({ value }) => {
+    const listenerId = progress.addListener(({ value }: { value: number }) => {
       setPercent(Math.floor(value * 100));
     });
 
@@ -95,50 +94,137 @@ export const UpdateManager = () => {
     }
   };
 
-  if (!isDownloading) return null;
-
   return (
-    <Modal transparent visible={true} animationType="fade">
-      <View style={styles.overlay}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Updating OneCalc...</Text>
-          <Text style={styles.subtitle}>Naye features install ho rahe hain, kripya intezar karein.</Text>
-          
-          <View style={styles.progressBarBg}>
-            <Animated.View 
-              style={[
-                styles.progressBarFill, 
-                { width: progress.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] }) }
-              ]} 
-            />
+    <>
+      {/* WHAT'S NEW MODAL (v1.2.0) */}
+      <Modal transparent visible={isWhatsNewVisible} animationType="fade">
+        <View style={styles.overlay}>
+          <View style={styles.container}>
+            <View style={styles.headerIcon}>
+              <Text style={{fontSize: 40}}>🚀</Text>
+            </View>
+            <Text style={styles.title}>Welcome to OneCalc v1.2.0!</Text>
+            
+            <View style={styles.pointsContainer}>
+              <View style={styles.pointRow}>
+                <Text style={styles.pointEmoji}>🌍</Text>
+                <View style={{flex:1}}>
+                  <Text style={styles.pointTitle}>Real-Time Currency</Text>
+                  <Text style={styles.pointDesc}>Live market rates with 150+ countries added.</Text>
+                </View>
+              </View>
+              <View style={styles.pointRow}>
+                <Text style={styles.pointEmoji}>🔄</Text>
+                <View style={{flex:1}}>
+                  <Text style={styles.pointTitle}>Auto-Sync</Text>
+                  <Text style={styles.pointDesc}>Rates stay updated every time you launch.</Text>
+                </View>
+              </View>
+              <View style={styles.pointRow}>
+                <Text style={styles.pointEmoji}>📊</Text>
+                <View style={{flex:1}}>
+                  <Text style={styles.pointTitle}>Precision</Text>
+                  <Text style={styles.pointDesc}>Fixed all Scientific & Age Tool calculations.</Text>
+                </View>
+              </View>
+              <View style={styles.pointRow}>
+                <Text style={styles.pointEmoji}>🎁</Text>
+                <View style={{flex:1}}>
+                  <Text style={styles.pointTitle}>Hourly Notifications</Text>
+                  <Text style={styles.pointDesc}>Stay engaged with daily tips and tricks!</Text>
+                </View>
+              </View>
+            </View>
+
+            <TouchableOpacity style={styles.awesomeBtn} onPress={closeWhatsNew}>
+              <Text style={styles.awesomeBtnText}>Awesome! Let&apos;s Go</Text>
+            </TouchableOpacity>
           </View>
-          
-          <Text style={styles.percentText}>{percent}%</Text>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+
+      {/* DOWNLOAD MODAL */}
+      <Modal transparent visible={isDownloading} animationType="fade">
+        <View style={styles.overlay}>
+          <View style={styles.container}>
+            <Text style={styles.title}>Updating OneCalc...</Text>
+            <Text style={styles.subtitle}>Naye features install ho rahe hain, kripya intezar karein.</Text>
+            
+            <View style={styles.progressBarBg}>
+              <Animated.View 
+                style={[
+                  styles.progressBarFill, 
+                  { width: progress.interpolate({ inputRange: [0, 1], outputRange: ['0%', '100%'] }) }
+                ]} 
+              />
+            </View>
+            
+            <Text style={styles.percentText}>{percent}%</Text>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: 'rgba(10, 31, 68, 0.7)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   container: {
-    width: width * 0.85,
+    width: width * 0.88,
     backgroundColor: '#FFFFFF',
-    borderRadius: 24,
+    borderRadius: 32,
     padding: 24,
     alignItems: 'center',
+    elevation: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+  },
+  headerIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#F1F5F9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
   },
   title: {
     fontFamily: 'DMSans_700Bold',
-    fontSize: 20,
-    color: '#0F172A',
-    marginBottom: 8,
+    fontSize: 22,
+    color: '#0A1F44',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  pointsContainer: {
+    width: '100%',
+    marginBottom: 30,
+    gap: 16,
+  },
+  pointRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  pointEmoji: {
+    fontSize: 24,
+  },
+  pointTitle: {
+    fontFamily: 'DMSans_700Bold',
+    fontSize: 15,
+    color: '#0A1F44',
+  },
+  pointDesc: {
+    fontFamily: 'DMSans_400Regular',
+    fontSize: 13,
+    color: '#64748B',
+    lineHeight: 18,
   },
   subtitle: {
     fontFamily: 'DMSans_400Regular',
@@ -146,6 +232,18 @@ const styles = StyleSheet.create({
     color: '#64748B',
     textAlign: 'center',
     marginBottom: 24,
+  },
+  awesomeBtn: {
+    backgroundColor: '#0A1F44',
+    width: '100%',
+    paddingVertical: 16,
+    borderRadius: 16,
+    alignItems: 'center',
+  },
+  awesomeBtnText: {
+    fontFamily: 'DMSans_700Bold',
+    fontSize: 16,
+    color: '#FFFFFF',
   },
   progressBarBg: {
     width: '100%',

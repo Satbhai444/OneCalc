@@ -134,22 +134,22 @@ export default function ScientificCalculator() {
         setInput(res); 
       }
     }
-    else if (['sin', 'cos', 'tan', 'log', 'ln', '√', 'sin⁻¹', 'cos⁻¹', 'tan⁻¹'].includes(value)) { setInput(prev => prev + value + '('); }
-    else if (value === 'x²') { setInput(prev => prev + '^2'); }
-    else if (value === 'x³') { setInput(prev => prev + '^3'); }
-    else if (value === 'xʸ') { setInput(prev => prev + '^'); }
-    else if (value === 'eˣ') { setInput(prev => prev + 'e^('); }
-    else if (value === '10ˣ') { setInput(prev => prev + '10^('); }
-    else if (value === '1/x') { setInput(prev => prev + '1/('); }
-    else if (value === 'n!') { setInput(prev => prev + '!'); }
-    else if (value === 'Ans') { setInput(prev => prev + lastAns); }
-    else if (value === 'RND') { setInput(prev => prev + Math.random().toFixed(4)); }
-    else if (value === 'M+') { const res = evaluateSci(input); if (res !== 'Error') setMemory(prev => prev + parseFloat(res)); }
-    else if (value === 'M-') { const res = evaluateSci(input); if (res !== 'Error') setMemory(prev => prev - parseFloat(res)); }
-    else if (value === 'MR') { setInput(prev => prev + memory.toString()); }
-    else if (value === '±') { setInput(prev => prev.startsWith('-') ? prev.slice(1) : '-' + prev); }
-    else if (value === 'EXP') { setInput(prev => prev + 'e'); }
-    else { setInput(prev => prev + value); }
+    else if (['sin', 'cos', 'tan', 'log', 'ln', '√', 'sin⁻¹', 'cos⁻¹', 'tan⁻¹'].includes(value)) { setInput((prev: string) => prev + value + '('); }
+    else if (value === 'x²') { setInput((prev: string) => prev + '^2'); }
+    else if (value === 'x³') { setInput((prev: string) => prev + '^3'); }
+    else if (value === 'xʸ') { setInput((prev: string) => prev + '^'); }
+    else if (value === 'eˣ') { setInput((prev: string) => prev + 'e^('); }
+    else if (value === '10ˣ') { setInput((prev: string) => prev + '10^('); }
+    else if (value === '1/x') { setInput((prev: string) => prev + '1/('); }
+    else if (value === 'n!') { setInput((prev: string) => prev + '!'); }
+    else if (value === 'Ans') { setInput((prev: string) => prev + lastAns); }
+    else if (value === 'RND') { setInput((prev: string) => prev + Math.random().toFixed(4)); }
+    else if (value === 'M+') { const res = evaluateSci(input); if (res !== 'Error') setMemory((prev: number) => prev + parseFloat(res)); }
+    else if (value === 'M-') { const res = evaluateSci(input); if (res !== 'Error') setMemory((prev: number) => prev - parseFloat(res)); }
+    else if (value === 'MR') { setInput((prev: string) => prev + memory.toString()); }
+    else if (value === '±') { setInput((prev: string) => prev.startsWith('-') ? prev.slice(1) : '-' + prev); }
+    else if (value === 'EXP') { setInput((prev: string) => prev + 'e'); }
+    else { setInput((prev: string) => prev + value); }
   };
 
   const buttons = [

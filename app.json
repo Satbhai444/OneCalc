@@ -2,7 +2,9 @@
   "expo": {
     "name": "OneCalc",
     "slug": "OneCalc",
-    "version": "1.0.0",
+    "owner": "darshansatbhai",
+    "sdkVersion": "52.0.0",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "onecalc",
@@ -24,7 +26,7 @@
       }
     },
     "web": {
-      "output": "static",
+      "output": "single",
       "favicon": "./assets/images/favicon.png"
     },
     "plugins": [
@@ -40,28 +42,11 @@
             "backgroundColor": "#000000"
           }
         }
-      ],
-      "@react-native-community/datetimepicker",
-      "expo-font",
-      [
-        "react-native-android-widget",
-        {
-          "widgets": [
-            {
-              "name": "OneCalcWidget",
-              "label": "OneCalc Basic",
-              "minWidth": "140dp",
-              "minHeight": "110dp",
-              "description": "Basic Calculator widget",
-              "previewImage": "./assets/images/icon.png"
-            }
-          ]
-        }
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
+      "typedRoutes": false,
+      "reactCompiler": false
     },
     "extra": {
       "router": {},
@@ -71,9 +56,6 @@
     },
     "updates": {
       "url": "https://u.expo.dev/d9dab27f-ec5d-447f-962a-a3bfdddb6729"
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
     }
   }
 }
