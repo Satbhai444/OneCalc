@@ -29,8 +29,8 @@ export const UpdateManager = () => {
       if (currentId !== savedId) {
         Alert.alert(
           "What's New! 🚀",
-          "• Upgraded Area & Volume Calculator\n• Support for 2D/3D shapes (Sphere, Cone, etc.)\n• Math formulas for students\n• New premium 3D App Icon",
-          [{ text: "Great!" }]
+          "• Real-Time Currency: Live Market Rates (INR Base)\n• Hourly Notifications: 50+ Unique Messages\n• Check for Update: Manual trigger added\n• Scientific Calc: Fixed Trig & Precision\n• Currency: 150+ Countries & Refresh Button\n• GST: Easy Labels & Share Breakdown\n• Age: Next Birthday Fix & Life Stats\n• Bill Splitter: Friend Names & Receipts\n• New Units: Data, Speed, Pressure, etc.\n• Number System: Real-time 4-Base UX",
+          [{ text: "Awesome!" }]
         );
         await AsyncStorage.setItem('LAST_RUN_UPDATE_ID', currentId);
       }

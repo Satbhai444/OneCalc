@@ -7,18 +7,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { AppProvider } from '../context/AppContext';
 import { UpdateManager } from '../hooks/use-update-manager';
 import * as Notifications from 'expo-notifications';
+import { scheduleHourlyNotifications, scheduleDailyNotifications } from '../utils/notifications';
 
 SplashScreen.preventAutoHideAsync();
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-    shouldShowBanner: true,
-    shouldShowList: true,
-  }),
-});
+// Notification handler moved to utils/notifications.ts
 
 export default function Layout() {
   const [loaded, error] = useFonts({
@@ -30,6 +23,9 @@ export default function Layout() {
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
+      // Initialize Hourly & Daily notifications on app launch
+      scheduleHourlyNotifications();
+      scheduleDailyNotifications();
     }
   }, [loaded, error]);
 

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, SafeAreaView, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, SafeAreaView, Platform , Alert } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
+import * as Updates from 'expo-updates';
 import Header from '../components/Header';
 
 export default function AboutDeveloperScreen() {
@@ -83,7 +84,7 @@ export default function AboutDeveloperScreen() {
           <View style={styles.projectItem}>
             <Text style={styles.projectTitle}>1. OneCalc — All-in-One Calculator App</Text>
             <Text style={styles.projectBody}>Smart Android app with 12 powerful calculator tools. Built entirely through AI prompting using Expo React Native. Features: Live currency rates, GST, EMI, Age calculator with birthday reminders, Bill splitter, and more.</Text>
-            <Text style={styles.projectStatus}>Status: 🟢 Active Development</Text>
+            <Text style={styles.projectStatus}>Status: 🟢 Live & Optimized</Text>
           </View>
           <View style={styles.divider} />
 
@@ -133,6 +134,36 @@ export default function AboutDeveloperScreen() {
           </TouchableOpacity>
           <View style={styles.divider} />
 
+          {/* UPDATE CHECK BUTTON */}
+          <TouchableOpacity 
+            style={styles.updateBtn} 
+            onPress={() => {
+              // Trigger update check via context/hook
+              Updates.checkForUpdateAsync().then(res => {
+                if (res.isAvailable) {
+                  Alert.alert("Update Available! 🚀", "Naya update mil gaya hai. Download karein?", [
+                    { text: "No" },
+                    { text: "Update Now", onPress: () => {
+                      Updates.fetchUpdateAsync().then(() => Updates.reloadAsync());
+                    }}
+                  ]);
+                } else {
+                  Alert.alert("Up to Date ✅", "Aapka app pehle se hi updated hai!");
+                }
+              }).catch(e => Alert.alert("Error", "Update check nahi ho paya."));
+            }}
+          >
+            <View style={styles.contactIconBg}>
+              <MaterialCommunityIcons name="update" size={22} color="#00897B" />
+            </View>
+            <View style={{flex: 1}}>
+              <Text style={styles.contactLabel}>Maintenance</Text>
+              <Text style={styles.contactValue}>Check for Update</Text>
+            </View>
+            <MaterialCommunityIcons name="chevron-right" size={24} color="#7A9BB5" />
+          </TouchableOpacity>
+          <View style={styles.divider} />
+
           <TouchableOpacity style={styles.contactRow} onPress={() => openLink('https://daarshannexaa.in')}>
             <View style={styles.contactIconBg}>
               <Text style={{fontSize: 20}}>🌐</Text>
@@ -148,7 +179,7 @@ export default function AboutDeveloperScreen() {
         {/* SECTION 7 — FOOTER */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>Built with ❤️ using AI + Prompting</Text>
-          <Text style={styles.footerText}>OneCalc v1.0.0 — Made in India 🇮🇳</Text>
+          <Text style={styles.footerText}>OneCalc v1.2.0 — Made in India 🇮🇳</Text>
         </View>
 
       </ScrollView>
@@ -339,6 +370,11 @@ const styles = StyleSheet.create({
 
   // Contact
   contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+  },
+  updateBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,

@@ -21,92 +21,33 @@ if (Platform.OS === 'android') {
   });
 }
 
-const TOOL_MESSAGES: { [key: string]: string[] } = {
-  basic: [
-    "Arre bhai, hisaab kar le! 🧮",
-    "Calculator khola? Kuch toh calculate kar! 😄",
-    "Seedha hisaab, seedha jawab! ✅",
-    "Aaj ka hisaab aaj hi nipto! 💪",
-    "Number game on hai kya? 🎯"
-  ],
-  scientific: [
-    "Formulas yaad nahi? OneCalc pe chhor! 🧠",
-    "Trigonometry ya Log? Ek sec mein solution! 🔬",
-    "Math functions ready hain tere liye! 📊",
-    "Advanced maths made easy! 📐",
-    "Scientific Calc loaded! 🧪" // User didn't specify scientific texts, reusing similar standard format
-  ],
-  currency: [
-    "Dollar aaj upar hai ya neeche? Check kar! 💸",
-    "Videsh jaane ka plan? Pehle rate dekh! ✈️",
-    "INR vs USD — kaun jeet raha hai aaj? 🏆",
-    "Live rates hain bhai, Google mat kar! 😎",
-    "Paisa convert karna hai? Ek tap mein! 💱"
-  ],
-  emi: [
-    "Loan lene ka soch raha hai? EMI check kar pehle! 🏦",
-    "EMI kitni hogi? 2 second mein pata karo! ⚡",
-    "Bade sapne, chhoti EMI — calculate kar! 🏠",
-    "Loan se pehle OneCalc se pehle! 😄",
-    "Monthly EMI ready hai tera! 📊"
-  ],
-  gst: [
-    "GST lagega kitna? Seedha pata karo! 🧾",
-    "18% ya 28%? Confuse mat ho! ✅",
-    "Bill aaya? GST nikaalo jaldi! 💰",
-    "Tax ka hisaab — ek second mein! ⚡",
-    "GST wala calculator — India ke liye! 🇮🇳"
-  ],
-  interest: [
-    "Paisa invest kiya? Return dekh! 📈",
-    "FD kitna degi? Abhi calculate kar! 🏦",
-    "Simple ya compound — dono ready hain! 💡",
-    "Paisa kaam kare tera — interest check kar! 💸",
-    "Savings ka hisaab lagao aaj! 🎯"
-  ],
-  age: [
-    "Kitne saal ke ho gaye bhai? 🎂",
-    "Birthday aane wali hai kya? Check kar! 🎉",
-    "Age sirf number hai — but janlo toh sahi! 😄",
-    "Exact age — years, months, days mein! 📅",
-    "Next birthday kitne din mein? 🎊"
-  ],
-  split: [
-    "Dosto ke saath khaya? Bill split karo! 🍽️",
-    "Kaun kitna dega? Jhagda khatam! ✌️",
-    "Fair split — ek second mein! 💪",
-    "Bill aaya, calculator ready hai! 🧾",
-    "Tip bhi calculate kar lo saath mein! 😎"
-  ],
-  unit: [
-    "kg to lbs? Ek tap mein! ⚖️",
-    "Miles ya kilometers? Confuse mat ho! 🚗",
-    "Temperature convert karna? Easy hai! 🌡️",
-    "Units ka chakkar — OneCalc pe chhor! 😄",
-    "Convert karo — sab units ready hain! 📏"
-  ],
-  discount: [
-    "Sale chal rahi hai? Discount nikaalo! 🏷️",
-    "50% off matlab kitna bachega? Check kar! 💰",
-    "Shopping se pehle discount calculate kar! 🛍️",
-    "Asli price kitni थी? Reverse calculate kar! 🔄",
-    "Deal acha hai ya nahi? Abhi pata karo! 🎯"
-  ],
-  bases: [
-    "Binary to Decimal? Ek second mein! 💻",
-    "Coding kar raha hai? Number converter ready! 🖥️",
-    "Hex, Octal, Binary — sab ek jagah! 🔣",
-    "CS student ho? Ye tool tumhara hai! 🎓",
-    "Number systems — easy ho gaye! ✅"
-  ],
-  shapes: [
-    "Room ka area nikalna hai? Jaldi karo! 📐",
-    "Ghar banana? Volume calculate kar! 🏠",
-    "Circle ka area? Formula yaad nahi? Koi baat nahi! 😄",
-    "Math easy hai OneCalc ke saath! ✏️",
-    "Shape select karo, answer ready! 🎯"
-  ]
-};
+const NOTIFICATION_POOL = [
+  "Bhai, hisaab kar le! 🧮", "Calculator khola? Kuch toh calculate kar! 😄", "Seedha hisaab, seedha jawab! ✅", 
+  "Aaj ka hisaab aaj hi nipto! 💪", "Number game on hai kya? 🎯", "Formula bhool gaye? OneCalc hai na! 🧠", 
+  "Dollar kitna hai aaj? Check karo! 💸", "GST nikalna hai? Ek second mein! 🧾", "Bill split karo, jhagda khatam! 🍽️",
+  "EMI kitni banegi? Abhi check kar! 🏦", "Next birthday kab hai? 🎂", "Kitne saal ke ho gaye? Exact dekho! 📅",
+  "Binary to Hex? Easy with OneCalc! 💻", "Area nikalna hai ghar ka? 🏠", "Unit convert karo instantly! ⚖️",
+  "Discount kitna mil raha hai? 🛍️", "Savings ka plan hai? Interest dekho! 📈", "Maths is fun with OneCalc! ✏️",
+  "Cool tools for cool users! 😎", "OneCalc: Your smart companion! 🤖", "Tax ka tension? GST tool use kar! 💰",
+  "Shopping sale? Discount calculate kar! 🏷️", "Miles to KM? Ek tap mein! 🚗", "Kg to Lbs? OneCalc is fast! ⚡",
+  "Shapes and sizes? Volume nikaalo! 📐", "Complex maths? Scientific mode on! 🧪", "Dark mode vs Light mode? Dono sexy hain! 🌗",
+  "Privacy first! Hum data store nahi karte! 🔒", "Offline power! No internet needed! ☁️", "Made in India, for the World! 🇮🇳",
+  "Ad-free experience! Shift to Premium! ✨", "Calculator upgrade ho gaya! Check kar! 🚀", "Dosto ko suggest karo OneCalc! ❤️",
+  "5-star rating dena mat bhoolna! ⭐", "Daily calculation, Daily motivation! 💪", "Hisaab barabar, rishta barabar! 🤝",
+  "Time is money, save it with OneCalc! 🕒", "Simple tools, Big impact! 💎", "Calculation mein no mistake! ✅",
+  "Precision mode activated! 🎯", "Math magic in your pocket! 🪄", "OneCalc: Sabse fast, sabse best! 🥇",
+  "Arey ruk! Discount check kiya? 🛍️", "Loan lene se pehle EMI check kar! 🏦", "Bhai, 18% GST ya 28%? 🧾",
+  "Duniya badal rahi hai, rates bhi! Check kar! 💱", "Trigonometry se darna kaisa? 📐", "Logarithms fast and easy! 🔬",
+  "Programming bases converted! 🖥️", "Ghar ka paint? Area calculate kar! 🎨", "Health track? Age stats dekho! 🎂",
+  "OneCalc — App nahi, zarurat hai! 🌟",
+  "Maths ka topper banna hai? Practice kar bitwa! ✍️", "Salary aayi? Budgeting shuru karo! 💸", "Crypto rates? Next update mein shayad! 😉",
+  "Physics numericals? Scientific mode use kar! ⚛️", "Gadi ki speed convert ki kya? 🏎️", "Square feet to Square meter? Easy! 📐",
+  "Pressure kitna hai? Unit converter check kar! 🌬️", "Data bytes to GB? OneCalc is smart! 💾", "Fuel cost calculate kiya? ⛽",
+  "Gold rates changes? Investment check kar! 🏆", "Kitchen measurement? Grams to Oz! 🥘", "Travel plan? Currency switch kar! ✈️",
+  "OneCalc: Zero ads, Full Power! ⚡", "India ka apna smart calculator! 🇮🇳", "Hisaab mein gadbad? Kabhi nahi! ❌",
+  "Smart calculation, Smart Life! 🌈", "Bilkul accurate, Bilkul fast! ⏱️", "Numbers are beautiful, just like you! 😊",
+  "Hisaab ka king! OneCalc is here! 👑", "Maths se dosti kar lo! 🤝", "Every calculation counts! 🔢"
+];
 
 const INACTIVITY_MESSAGES = [
   "Bhai kahan ho? OneCalc miss kar raha hai tujhe! 😄🧮",
@@ -118,34 +59,70 @@ const INACTIVITY_MESSAGES = [
 
 const checkNotificationsEnabled = async () => {
   const isEnabled = await AsyncStorage.getItem('@settings_notifications');
-  return isEnabled !== 'false'; // Default enabled if null
+  return isEnabled !== 'false';
 };
 
-export const scheduleToolNotification = async (toolId: string) => {
+export const scheduleHourlyNotifications = async () => {
   if (!(await checkNotificationsEnabled())) return;
 
-  const messages = TOOL_MESSAGES[toolId] || TOOL_MESSAGES['basic'];
-  const body = messages[Math.floor(Math.random() * messages.length)];
+  // 1. Get showed indices
+  const showedStr = await AsyncStorage.getItem('@showed_notification_indices');
+  let showedIndices: number[] = showedStr ? JSON.parse(showedStr) : [];
 
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: "OneCalc 🧮",
-      body: body,
-    },
-    trigger: { 
-      type: 'timeInterval',
-      seconds: 7200 
-    } as any // 2 hours
-  });
+  // 2. Filter available indices
+  let availableIndices = NOTIFICATION_POOL.map((_, i) => i).filter(i => !showedIndices.includes(i));
 
-  // Push inactivity clock forward
+  // 3. Reset if all shown
+  if (availableIndices.length === 0) {
+    showedIndices = [];
+    availableIndices = NOTIFICATION_POOL.map((_, i) => i);
+  }
+
+  // 4. Cancel existing to prevent stacking
+  const scheduled = await Notifications.getAllScheduledNotificationsAsync();
+  for (const n of scheduled) {
+    if (n.identifier.startsWith('hourly_')) await Notifications.cancelScheduledNotificationAsync(n.identifier);
+  }
+
+  // 5. Schedule next 12 hours
+  for (let h = 1; h <= 12; h++) {
+    if (availableIndices.length === 0) {
+      showedIndices = [];
+      availableIndices = NOTIFICATION_POOL.map((_, i) => i);
+    }
+    
+    const randomIdx = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+    const msg = NOTIFICATION_POOL[randomIdx];
+    
+    showedIndices.push(randomIdx);
+    availableIndices = availableIndices.filter(i => i !== randomIdx);
+
+    await Notifications.scheduleNotificationAsync({
+      identifier: `hourly_${h}`,
+      content: {
+        title: "OneCalc 🧮",
+        body: msg,
+      },
+      trigger: {
+        type: 'timeInterval',
+        seconds: h * 3600,
+        repeats: false
+      } as any
+    });
+  }
+
+  await AsyncStorage.setItem('@showed_notification_indices', JSON.stringify(showedIndices));
+};
+
+export const scheduleToolNotification = async (toolId?: string) => {
+  if (!(await checkNotificationsEnabled())) return;
+  await scheduleHourlyNotifications();
   await scheduleInactivityNotification();
 };
 
 export const scheduleDailyNotifications = async () => {
   if (!(await checkNotificationsEnabled())) return;
 
-  // Cancel old daily notifications if exist to prevent duplicate intervals
   const scheduled = await Notifications.getAllScheduledNotificationsAsync();
   scheduled.forEach(async (n) => {
     if (n.identifier.startsWith('daily_')) {
@@ -178,7 +155,6 @@ export const scheduleDailyNotifications = async () => {
 export const scheduleInactivityNotification = async () => {
   if (!(await checkNotificationsEnabled())) return;
 
-  // Reschedule inactivity trigger for 3 days from now
   await Notifications.cancelScheduledNotificationAsync('inactivity_reminder');
 
   const randomIdx = Math.floor(Math.random() * INACTIVITY_MESSAGES.length);
@@ -202,28 +178,21 @@ export const triggerTestNotification = async () => {
   if (status !== 'granted') {
     const { status: newStatus } = await Notifications.requestPermissionsAsync();
     if (newStatus !== 'granted') {
-      Alert.alert(
-        "Permission Denied 🚫",
-        "Settings me jaake OneCalc ke liye notifications allow karein tabhi ye test kaam karega."
-      );
+      Alert.alert("Permission Denied 🚫", "Settings me jaake notifications allow karein.");
       return;
     }
   }
 
-  // Pick a random message from TOOL_MESSAGES for preview
-  const tools = Object.keys(TOOL_MESSAGES);
-  const randomTool = tools[Math.floor(Math.random() * tools.length)];
-  const messages = TOOL_MESSAGES[randomTool];
-  const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+  const randomMsg = NOTIFICATION_POOL[Math.floor(Math.random() * NOTIFICATION_POOL.length)];
 
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "OneCalc 🧮",
+      title: "OneCalc 🧮 (Test)",
       body: randomMsg,
     },
     trigger: { 
       type: 'timeInterval',
-      seconds: 2,
+      seconds: 1,
       channelId: 'default'
     } as any
   });

@@ -9,7 +9,12 @@ import { scheduleToolNotification } from '../../utils/notifications';
 const CONVERSIONS = {
   Length: { M: 1, KM: 0.001, CM: 100, MM: 1000, IN: 39.37, FT: 3.28 },
   Weight: { KG: 1, G: 1000, MG: 1000000, LB: 2.2046, OZ: 35.27 },
-  Temp: { C: 'C', F: 'F', K: 'K' }, // Needs custom logic
+  Data: { B: 1, KB: 1/1024, MB: 1/1048576, GB: 1/1073741824, TB: 1/1099511627776 },
+  Speed: { 'm/s': 1, 'km/h': 3.6, mph: 2.237, knot: 1.944 },
+  Area: { 'm²': 1, 'km²': 0.000001, 'ft²': 10.764, acre: 0.000247, hectare: 0.0001 },
+  Pressure: { Pa: 1, bar: 0.00001, psi: 0.000145, atm: 0.00000987 },
+  Power: { W: 1, kW: 0.001, hp: 0.00134 },
+  Temp: { C: 'C', F: 'F', K: 'K' },
 };
 
 export default function UnitConverter() {
@@ -56,14 +61,14 @@ export default function UnitConverter() {
         </View>
 
         <View style={styles.card}>
-          <Text style={styles.label}>Category</Text>
-          <View style={styles.ratesRow}>
+          <Text style={styles.label}>Select Category</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoriesScroll}>
             {Object.keys(CONVERSIONS).map(cat => (
               <TouchableOpacity key={cat} style={[styles.rateBtn, category === cat && styles.rateBtnActive]} onPress={() => { triggerHaptic(); setCategory(cat as any); const u = Object.keys(CONVERSIONS[cat as keyof typeof CONVERSIONS]); setFromUnit(u[0]); setToUnit(u[1] || u[0]); }}>
                 <Text style={[styles.rateBtnText, category === cat && styles.rateBtnTextActive]}>{cat}</Text>
               </TouchableOpacity>
             ))}
-          </View>
+          </ScrollView>
 
           <Text style={styles.label}>Amount</Text>
           <TextInput style={styles.input} value={amount} onChangeText={setAmount} keyboardType="numeric" selectionColor="#BAD7F2" onSubmitEditing={triggerSave}/>
@@ -104,9 +109,10 @@ const getStyles = (Colors: any) => StyleSheet.create({
   label: { fontFamily: 'DMSans_500Medium', color: Colors.text, fontSize: 14, marginBottom: 8 },
   input: { backgroundColor: Colors.background, color: Colors.text, fontFamily: 'DMSans_700Bold', fontSize: 18, borderRadius: 16, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: Colors.border },
   ratesRow: { flexDirection: 'row', gap: 8, marginBottom: 16 },
-  rateBtn: { flex: 1, paddingVertical: 12, alignItems: 'center', borderRadius: 12, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border },
+  categoriesScroll: { gap: 8, paddingBottom: 16 },
+  rateBtn: { paddingHorizontal: 16, paddingVertical: 10, alignItems: 'center', justifyContent: 'center', borderRadius: 12, backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, minWidth: 80 },
   rateBtnActive: { backgroundColor: '#4A90D9', borderColor: '#4A90D9' },
-  rateBtnText: { fontFamily: 'DMSans_700Bold', color: Colors.text, fontSize: 14 },
+  rateBtnText: { fontFamily: 'DMSans_700Bold', color: Colors.text, fontSize: 13 },
   rateBtnTextActive: { color: '#FFFFFF' },
   row: { flexDirection: 'row', gap: 12 },
   pickerWrapper: { backgroundColor: Colors.background, borderRadius: 16, borderWidth: 1, borderColor: Colors.border, overflow: 'hidden' }

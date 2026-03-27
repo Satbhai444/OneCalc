@@ -63,18 +63,38 @@ export default function AgeCalculator() {
 
   const calculateNextBirthday = () => {
     const today = new Date();
+    today.setHours(0, 0, 0, 0);
     const nextBday = new Date(today.getFullYear(), date.getMonth(), date.getDate());
-    if (nextBday < today) {
+    nextBday.setHours(0, 0, 0, 0);
+    
+    if (nextBday <= today) {
       nextBday.setFullYear(today.getFullYear() + 1);
     }
     const diff = nextBday.getTime() - today.getTime();
-    const daysLeft = Math.ceil(diff / (1000 * 60 * 60 * 24));
+    const daysLeft = Math.floor(diff / (1000 * 60 * 60 * 24));
     return { daysLeft, nextBday };
+  };
+
+  const calculateLifeStats = () => {
+    const diffTime = Math.abs(new Date().getTime() - date.getTime());
+    const totalDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    const totalWeeks = Math.floor(totalDays / 7);
+    const totalMonths = (new Date().getFullYear() - date.getFullYear()) * 12 + (new Date().getMonth() - date.getMonth());
+    const totalHours = totalDays * 24;
+    return { totalDays, totalWeeks, totalMonths, totalHours };
+  };
+
+  const getZodiac = (d: number, m: number) => {
+    const days = [20, 19, 21, 20, 21, 22, 23, 23, 23, 24, 22, 22];
+    const signs = ["Capricorn", "Aquarius", "Pisces", "Aries", "Taurus", "Gemini", "Cancer", "Leo", "Virgo", "Libra", "Scorpio", "Sagittarius"];
+    return d > days[m - 1] ? signs[m % 12] : signs[m - 1];
   };
 
   const handleSetReminder = async () => {
     triggerHaptic();
     const { nextBday } = calculateNextBirthday();
+    // Set time to 9 AM on the birthday
+    nextBday.setHours(9, 0, 0, 0);
     const birthdayTimestamp = nextBday.getTime();
 
     try {
@@ -85,9 +105,10 @@ export default function AgeCalculator() {
             data: 'content://com.android.calendar/events',
             extra: {
               title: '🎂 My Birthday!',
-              description: note || 'Plan a party!',
+              description: note || 'Plan a party! (OneCalc Reminder)',
               beginTime: birthdayTimestamp,
-              allDay: true,
+              endTime: birthdayTimestamp + 3600000,
+              allDay: false, // Setting to false so it has a specific time
               rrule: 'FREQ=YEARLY'
             }
           }
@@ -102,6 +123,8 @@ export default function AgeCalculator() {
 
   const { years, months, days } = calculateAge();
   const { daysLeft, nextBday } = calculateNextBirthday();
+  const { totalDays, totalWeeks, totalMonths, totalHours } = calculateLifeStats();
+  const zodiac = getZodiac(date.getDate(), date.getMonth() + 1);
 
   const triggerSave = () => {
     const dobStr = inputMode === 'calendar' ? date.toLocaleDateString('en-GB') : `${day}/${month}/${year}`;
@@ -151,10 +174,13 @@ export default function AgeCalculator() {
 
         {/* Card 1: Your Age */}
         <View style={styles.displayCard}>
-          <Text style={styles.displayLabel}>Your Age</Text>
+          <Text style={styles.displayLabel}>Your Current Age</Text>
           <Text style={styles.displayText} numberOfLines={1} adjustsFontSizeToFit>
             {years} <Text style={styles.displaySub}>Y</Text> {months} <Text style={styles.displaySub}>M</Text> {days} <Text style={styles.displaySub}>D</Text>
           </Text>
+          <View style={styles.zodiacTag}>
+             <Text style={styles.zodiacText}>✨ {zodiac}</Text>
+          </View>
         </View>
 
         {/* Card 2: Next Birthday */}
@@ -163,6 +189,17 @@ export default function AgeCalculator() {
           <Text style={[styles.displayText, { color: '#00897B' }]}>{daysLeft} <Text style={styles.displaySub}>Days</Text></Text>
           <View style={styles.divider} />
           <Text style={styles.statLabel}>Exact Date: <Text style={{fontWeight:'bold', color: Colors.text}}>{formattedNextBday}</Text></Text>
+        </View>
+
+        {/* Card 3: Life Journey Stats */}
+        <View style={styles.displayCard}>
+          <Text style={styles.displayLabel}>Your Life Journey</Text>
+          <View style={styles.statsGrid}>
+            <View style={styles.statBox}><Text style={styles.gridStatValue}>{totalMonths.toLocaleString()}</Text><Text style={styles.gridStatLabel}>Months</Text></View>
+            <View style={styles.statBox}><Text style={styles.gridStatValue}>{totalWeeks.toLocaleString()}</Text><Text style={styles.gridStatLabel}>Weeks</Text></View>
+            <View style={styles.statBox}><Text style={styles.gridStatValue}>{totalDays.toLocaleString()}</Text><Text style={styles.gridStatLabel}>Days</Text></View>
+            <View style={styles.statBox}><Text style={styles.gridStatValue}>{totalHours.toLocaleString()}</Text><Text style={styles.gridStatLabel}>Hours</Text></View>
+          </View>
         </View>
 
         {/* Card 3: Reminder */}
@@ -202,5 +239,11 @@ const getStyles = (Colors: any) => StyleSheet.create({
   statLabel: { fontFamily: 'DMSans_500Medium', color: Colors.textMuted, fontSize: 14 },
   noteInput: { backgroundColor: Colors.background, color: Colors.text, fontFamily: 'DMSans_400Regular', fontSize: 14, borderRadius: 16, padding: 14, marginBottom: 16, borderWidth: 1, borderColor: Colors.border },
   reminderBtn: { backgroundColor: '#FF6B9D', paddingVertical: 16, borderRadius: 16, alignItems: 'center' },
-  reminderBtnText: { fontFamily: 'DMSans_700Bold', color: '#FFFFFF', fontSize: 16 }
+  reminderBtnText: { fontFamily: 'DMSans_700Bold', color: '#FFFFFF', fontSize: 16 },
+  zodiacTag: { backgroundColor: '#FCE4EC', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 20, marginTop: 12 },
+  zodiacText: { fontFamily: 'DMSans_700Bold', color: '#C2185B', fontSize: 12 },
+  statsGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: 12, width: '100%', marginTop: 8 },
+  statBox: { width: '47%', backgroundColor: Colors.background, padding: 12, borderRadius: 16, alignItems: 'center', borderWidth: 1, borderColor: Colors.border },
+  gridStatValue: { fontFamily: 'DMSans_700Bold', color: '#FF6B9D', fontSize: 16 },
+  gridStatLabel: { fontFamily: 'DMSans_500Medium', color: Colors.textMuted, fontSize: 11, marginTop: 2 }
 });

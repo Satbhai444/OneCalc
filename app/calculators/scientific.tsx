@@ -27,6 +27,8 @@ export default function ScientificCalculator() {
 
   const evaluateSci = (expression: string) => {
     try {
+      if (!expression) return '';
+      
       let calcStr = expression
         .replace(/×/g, '*')
         .replace(/÷/g, '/')
@@ -38,44 +40,84 @@ export default function ScientificCalculator() {
         .replace(/ln/g, 'Math.log')
         .replace(/\^/g, '**');
 
+      // Helper to handle trig conversions
+      const degToRad = (val: number) => (val * Math.PI) / 180;
+      const radToDeg = (val: number) => (val * 180) / Math.PI;
+
       // Inverse Trig Support
       calcStr = calcStr
         .replace(/sin⁻¹\(/g, 'Math.asin(')
         .replace(/cos⁻¹\(/g, 'Math.acos(')
         .replace(/tan⁻¹\(/g, 'Math.atan(');
 
-      // Trig fixes
-      const trigFix = (fnName: string) => {
-        const regex = new RegExp(`Math\\.${fnName}\\(([^)]+)\\)`, 'g');
-        calcStr = calcStr.replace(regex, (match, val) => {
-          let inner = eval(val);
-          if (!isRad) inner = (inner * Math.PI) / 180;
-          return `Math.${fnName}(${inner})`;
-        });
+      // We need a safe way to evaluate trig functions with DEGR/RAD support
+      const context: any = {
+        sin: (x: number) => {
+          const val = isRad ? x : degToRad(x);
+          const res = Math.sin(val);
+          return Math.abs(res) < 1e-15 ? 0 : res;
+        },
+        cos: (x: number) => {
+          const val = isRad ? x : degToRad(x);
+          const res = Math.cos(val);
+          return Math.abs(res) < 1e-15 ? 0 : res;
+        },
+        tan: (x: number) => {
+          const val = isRad ? x : degToRad(x);
+          // Handle asymptotes for Tan
+          if (Math.abs(Math.cos(val)) < 1e-15) return NaN;
+          const res = Math.tan(val);
+          return Math.abs(res) < 1e-15 ? 0 : res;
+        },
+        asin: (x: number) => isRad ? Math.asin(x) : radToDeg(Math.asin(x)),
+        acos: (x: number) => isRad ? Math.acos(x) : radToDeg(Math.acos(x)),
+        atan: (x: number) => isRad ? Math.atan(x) : radToDeg(Math.atan(x)),
+        sqrt: Math.sqrt,
+        log10: Math.log10,
+        log: Math.log,
+        exp: Math.exp,
+        PI: Math.PI,
+        E: Math.E,
+        factorialize
       };
-      trigFix('sin'); trigFix('cos'); trigFix('tan');
 
-      // Inverse Trig fixes Deg to Rad conversion 
-      const invTrigFix = (fnName: string) => {
-         const regex = new RegExp(`Math\\.${fnName}\\(([^)]+)\\)`, 'g');
-         calcStr = calcStr.replace(regex, (match, val) => {
-            let res = eval(`Math.${fnName}(${val})`);
-            if (!isRad) res = (res * 180) / Math.PI; 
-            return res.toString();
-         });
-      };
-      invTrigFix('asin'); invTrigFix('acos'); invTrigFix('atan');
+      // Map Math.xxx back to our context functions
+      calcStr = calcStr
+        .replace(/Math\.sin/g, 'sin')
+        .replace(/Math\.cos/g, 'cos')
+        .replace(/Math\.tan/g, 'tan')
+        .replace(/Math\.asin/g, 'asin')
+        .replace(/Math\.acos/g, 'acos')
+        .replace(/Math\.atan/g, 'atan')
+        .replace(/Math\.sqrt/g, 'sqrt')
+        .replace(/Math\.log10/g, 'log10')
+        .replace(/Math\.log/g, 'log')
+        .replace(/Math\.exp/g, 'exp')
+        .replace(/Math\.PI/g, 'PI')
+        .replace(/Math\.E/g, 'E');
 
-      // Factorial Fix
-      calcStr = calcStr.replace(/(\d+)!/g, (match, n) => `factorialize(${n})`);
+      // Factorial Fix (simple regex since it's suffix)
+      calcStr = calcStr.replace(/(\d+(\.\d*)?)!/g, (match, n) => `factorialize(${n})`);
 
-      // Evaluate
-      const calcResult = Function('factorialize', `'use strict'; return (${calcStr})`)(factorialize) as number;
-      if (!isFinite(calcResult) || isNaN(calcResult)) throw new Error('Err');
-      let finalResult = calcResult.toString();
-      if (finalResult.includes('.')) finalResult = parseFloat(finalResult).toFixed(6).replace(/\.?0+$/, '');
+      // Final evaluation using Function with context
+      const keys = Object.keys(context);
+      const values = Object.values(context);
+      const calcResult = new Function(...keys, `return ${calcStr}`)(...values);
+
+      if (typeof calcResult !== 'number' || !isFinite(calcResult) || isNaN(calcResult)) {
+        return 'Error';
+      }
+
+      // High precision formatting
+      let finalResult = calcResult.toPrecision(12);
+      // Remove trailing zeros and possible decimal point
+      finalResult = parseFloat(finalResult).toString();
+      
       return finalResult;
-    } catch { return 'Error'; }
+    } catch (e) {
+      console.error('Math Error:', e);
+      return 'Error';
+    }
   };
 
   const handlePress = (value: string) => {
