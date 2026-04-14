@@ -5,14 +5,17 @@ import ToolShell from '../../components/ToolShell';
 import { TOOL_CATEGORIES } from '../../constants/tool-categories';
 import { ToolRegistry } from '../../components/tools';
 
-const ToolPlaceholder = ({ name }: { name: string }) => (
-  <View style={{ padding: 24, alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
-    <Text style={{ fontSize: 18, color: '#666', textAlign: 'center', fontFamily: 'SpaceGrotesk_500Medium', lineHeight: 26 }}>
-      The premium engine for {name} is being optimized for 100% industrial precision.{"\n\n"}
-      <Text style={{ fontSize: 14, color: Colors.primary }}>Coming very soon in the next update!</Text>
-    </Text>
-  </View>
-);
+const ToolPlaceholder = ({ name }: { name: string }) => {
+  const { colors: Colors } = useApp();
+  return (
+    <View style={{ padding: 24, alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
+      <Text style={{ fontSize: 18, color: '#666', textAlign: 'center', fontFamily: 'SpaceGrotesk_500Medium', lineHeight: 26 }}>
+        The premium engine for {name} is being optimized for 100% industrial precision.{"\n\n"}
+        <Text style={{ fontSize: 14, color: Colors.primary }}>Coming very soon in the next update!</Text>
+      </Text>
+    </View>
+  );
+};
 
 export default function DynamicCalculator() {
   const { key } = useLocalSearchParams();

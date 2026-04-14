@@ -60,7 +60,7 @@ export const getToolIcon = (toolKey: string): string => {
     'age-on-date': 'calendar-account',
     'leap-year': 'calendar-star',
     countdown: 'timer-outline',
-    'world-clock': 'world-clock',
+    'world-clock': 'earth',
     'time-zone': 'map-marker-distance',
     'day-of-week': 'calendar-question',
 
@@ -78,18 +78,18 @@ export const getToolIcon = (toolKey: string): string => {
     notification: 'bell-ring',
 
     // Fun
-    dice: 'dice-multiple',
-    'coin-toss': 'circle-double',
-    'spin-wheel': 'whistle',
-    'rock-paper-scissors': 'hand-back-right',
-    'card-picker': 'cards',
-    lottery: 'ticket-percent',
-    'magic-8-ball': 'sphere',
-    'truth-dare': 'comment-question',
+    dice: 'dice-6',
+    'coin-toss': 'plus-circle-outline',
+    'spin-wheel': 'refresh',
+    'rock-paper-scissors': 'hand-back-left',
+    'card-picker': 'cards-playing-outline',
+    lottery: 'ticket',
+    'magic-8-ball': 'circle-outline',
+    'truth-dare': 'help-circle-outline',
     'memory-game': 'brain',
-    'number-guess': 'head-question',
-    'love-calc': 'heart-multiple',
-    zodiac: 'zodiac-leo'
+    'number-guess': 'numeric',
+    'love-calc': 'heart',
+    zodiac: 'zodiac-aquarius'
   };
 
   return iconMap[toolKey] || 'tools';
