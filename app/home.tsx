@@ -95,7 +95,7 @@ export default function HomeScreen() {
                 { 
                   backgroundColor: Colors.cardBg, 
                   borderColor: Colors.border,
-                  width: index % 3 === 0 ? '100%' : '48%', // Mix of full width and half width for bento look
+                  width: '48.2%', // Uniform 2-column grid
                 }
               ]}
               onPress={() => router.push(`/category/${cat.key}`)}
@@ -103,11 +103,10 @@ export default function HomeScreen() {
               <View style={[styles.catIconContainer, { backgroundColor: Colors.primary + '10' }]}>
                 <Text style={styles.catIconText}>{cat.icon}</Text>
               </View>
-              <View>
+              <View style={{ alignItems: 'center' }}>
                 <Text style={[styles.catName, { color: Colors.text }]}>{cat.name}</Text>
-                <Text style={[styles.catCount, { color: Colors.textMuted }]}>{cat.tools.length} Industrial Tools</Text>
+                <Text style={[styles.catCount, { color: Colors.textMuted }]}>{cat.tools.length} Tools</Text>
               </View>
-              <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.textMuted} style={styles.chevron} />
             </TouchableOpacity>
           ))}
         </View>
@@ -153,25 +152,24 @@ const styles = StyleSheet.create({
   favIcon: { fontSize: 24 },
   favName: { fontFamily: 'SpaceGrotesk_600SemiBold', fontSize: 12, textAlign: 'center' },
 
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, paddingHorizontal: 20 },
   catCard: { 
+    width: '47%',
     padding: 16, 
-    borderRadius: 24, 
+    borderRadius: 28, 
     borderWidth: 1, 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    gap: 16,
+    alignItems: 'center',
+    gap: 8,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.02,
     shadowRadius: 10,
     elevation: 2,
   },
-  catIconContainer: { width: 50, height: 50, borderRadius: 15, justifyContent: 'center', alignItems: 'center' },
+  catIconContainer: { width: 56, height: 56, borderRadius: 20, justifyContent: 'center', alignItems: 'center' },
   catIconText: { fontSize: 24 },
-  catName: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 16 },
-  catCount: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 12 },
-  chevron: { marginLeft: 'auto' },
+  catName: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 14, textAlign: 'center' },
+  catCount: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 11 },
 
   footer: { marginTop: 40, alignItems: 'center', gap: 4 },
   footerText: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 12, letterSpacing: 0.5 },

@@ -5,7 +5,7 @@ import { useThemeColor } from '../../hooks/use-theme-color';
 export default function SIPCalculator() {
   const bg = useThemeColor({}, 'background');
   const text = useThemeColor({}, 'text');
-  const card = useThemeColor({}, 'card');
+  const card = useThemeColor({}, 'cardBg');
   const [amount, setAmount] = useState('');
   const [rate, setRate] = useState('');
   const [months, setMonths] = useState('');

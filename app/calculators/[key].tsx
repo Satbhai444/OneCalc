@@ -7,8 +7,9 @@ import { ToolRegistry } from '../../components/tools';
 
 const ToolPlaceholder = ({ name }: { name: string }) => (
   <View style={{ padding: 24, alignItems: 'center', justifyContent: 'center', minHeight: 300 }}>
-    <Text style={{ fontSize: 18, color: '#666', textAlign: 'center', fontFamily: 'SpaceGrotesk_500Medium' }}>
-      The premium engine for {name} is currently being calibrated for 100% precision.
+    <Text style={{ fontSize: 18, color: '#666', textAlign: 'center', fontFamily: 'SpaceGrotesk_500Medium', lineHeight: 26 }}>
+      The premium engine for {name} is being optimized for 100% industrial precision.{"\n\n"}
+      <Text style={{ fontSize: 14, color: Colors.primary }}>Coming very soon in the next update!</Text>
     </Text>
   </View>
 );
