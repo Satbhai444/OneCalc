@@ -49,49 +49,83 @@ export default function HomeScreen() {
       <ScrollView style={{ flex: 1, backgroundColor: Colors.background }} contentContainerStyle={{ padding: 16 }}>
         <Text style={{ fontSize: 28, fontWeight: 'bold', color: Colors.text, marginBottom: 24 }}>Categories</Text>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          {TOOL_CATEGORIES.map(cat => (
-            <TouchableOpacity
-              key={cat.key}
-              style={{
-                width: '47%',
-                aspectRatio: 1.2,
-                backgroundColor: Colors.cardBg,
-                borderRadius: 16,
-                marginBottom: 16,
-                alignItems: 'center',
-                justifyContent: 'center',
-                elevation: 2
-              }}
-              onPress={() => router.push(`/category/${cat.key}`)}
-            >
-              <Text style={{ fontSize: 40, marginBottom: 8 }}>{cat.icon}</Text>
-              <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{cat.name}</Text>
-              <Text style={{ fontSize: 12, color: Colors.text, opacity: 0.6, marginTop: 4 }}>{cat.tools.length} tools</Text>
-            </TouchableOpacity>
-          ))}
+          {TOOL_CATEGORIES.map(cat => {
+            // Assign a unique color for each category card
+            const categoryColors = [
+              '#F9D923', '#00A19D', '#FF6F3C', '#6A2C70', '#3AB795', '#FFB319', '#FF6363', '#3A86FF', '#8338EC', '#FF006E', '#FB5607', '#FFBE0B'
+            ];
+            const color = categoryColors[cat.key.length % categoryColors.length] || Colors.cardBg;
+            // Optionally, map category to icon name
+            const categoryIcons: Record<string, string> = {
+              finance: 'cash-multiple',
+              health: 'heart-pulse',
+              conversion: 'swap-horizontal',
+              math: 'function-variant',
+              'date-time': 'calendar',
+              fun: 'emoticon-happy',
+              utility: 'tools',
+            };
+            const iconName = categoryIcons[cat.key] || undefined;
+            return (
+              <TouchableOpacity
+                key={cat.key}
+                style={{
+                  width: '47%',
+                  aspectRatio: 1.2,
+                  backgroundColor: color,
+                  borderRadius: 18,
+                  marginBottom: 16,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  elevation: 3,
+                  shadowColor: '#000',
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.08,
+                  shadowRadius: 8,
+                  borderWidth: 1,
+                  borderColor: Colors.border,
+                  position: 'relative',
+                }}
+                onPress={() => router.push(`/category/${cat.key}`)}
+                activeOpacity={0.85}
+              >
+                {iconName ? (
+                  <MaterialCommunityIcons name={iconName as any} size={40} color={Colors.text} style={{ marginBottom: 8 }} />
+                ) : (
+                  <Text style={{ fontSize: 40, marginBottom: 8 }}>{cat.icon}</Text>
+                )}
+                <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{cat.name}</Text>
+                <Text style={{ fontSize: 12, color: Colors.text, opacity: 0.6, marginTop: 4 }}>{cat.tools.length} tools</Text>
+              </TouchableOpacity>
+            );
+          })}
         </View>
 
         {favoriteItems.length > 0 && (
           <View style={styles.favSection}>
             <Text style={styles.sectionHeader}>FAVORITES</Text>
-            <FlatList
-              data={favoriteItems}
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              keyExtractor={(item) => `fav-${item.key}`}
-              contentContainerStyle={{ gap: 12, paddingVertical: 10 }}
-              renderItem={({ item }) => (
-                <TouchableOpacity style={styles.favItem} activeOpacity={0.8} onPress={() => router.push(`/tool/${item.key}`)}>
-                  <TouchableOpacity style={styles.starBtnFav} onPress={() => toggleFavorite(item.key)}>
-                    <MaterialCommunityIcons name="star" size={18} color="#FFD60A" />
-                  </TouchableOpacity>
-                  <View style={[styles.iconContainerFav, { backgroundColor: Colors.cardBg + '15' }]}> 
-                    <Text style={{ fontSize: 24 }}>{item.icon}</Text>
+            <View>
+              <FlatList
+                data={favoriteItems}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                keyExtractor={(item) => `fav-${item.key}`}
+                contentContainerStyle={{ gap: 12, paddingVertical: 10 }}
+                renderItem={({ item }) => (
+                  <View style={styles.favItem}>
+                    <TouchableOpacity style={styles.starBtnFav} onPress={() => toggleFavorite(item.key)}>
+                      <MaterialCommunityIcons name="star" size={18} color="#FFD60A" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} activeOpacity={0.8} onPress={() => router.push(`/tool/${item.key}`)}>
+                      <View style={[styles.iconContainerFav, { backgroundColor: Colors.cardBg + '15' }]}> 
+                        <Text style={{ fontSize: 24 }}>{item.icon}</Text>
+                      </View>
+                      <Text style={styles.favTitle} numberOfLines={1}>{item.name}</Text>
+                    </TouchableOpacity>
                   </View>
-                  <Text style={styles.favTitle} numberOfLines={1}>{item.name}</Text>
-                </TouchableOpacity>
-              )}
-            />
+                )}
+              />
+            </View>
             <View style={styles.divider} />
             <Text style={[styles.sectionHeader, { marginTop: 10 }]}>ALL TOOLS</Text>
           </View>
@@ -114,35 +148,7 @@ export default function HomeScreen() {
       <RatingModal visible={ratingVisible} onClose={() => setRatingVisible(false)} />
     </View>
   );
-                    <Text style={styles.favTitle} numberOfLines={1}>{item.title}</Text>
-                  </TouchableOpacity>
-                )}
-              />
-              <View style={styles.divider} />
-              <Text style={[styles.sectionHeader, { marginTop: 10 }]}>ALL TOOLS</Text>
-            </View>
-          ) : null
-        )}
-        ListFooterComponent={() => (
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>Made with ❤️ in India</Text>
-            <Text style={styles.footerText}>Made by Darshan Satbhai</Text>
-          </View>
-        )}
-      />
-
-      <SettingsModal 
-        visible={settingsVisible} 
-        onClose={() => setSettingsVisible(false)} 
-        onOpenRating={() => {
-          setSettingsVisible(false);
-          setTimeout(() => setRatingVisible(true), 300);
-        }}
-      />
-      
-      <RatingModal visible={ratingVisible} onClose={() => setRatingVisible(false)} />
-    </View>
-  );
+// Removed duplicate/leftover code after return
 }
 
 const getStyles = (Colors: any) => StyleSheet.create({
