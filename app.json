@@ -3,7 +3,7 @@
     "name": "OneCalc",
     "slug": "OneCalc",
     "owner": "darshansatbhai",
-    "sdkVersion": "52.0.0",
+    "sdkVersion": "54.0.0",
     "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
