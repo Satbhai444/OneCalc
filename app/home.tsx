@@ -10,6 +10,9 @@ import { useApp } from '../context/AppContext';
 
 const DEV_MODE = false; // Testing ke liye true rakho // Production mein false kar dena
 
+import { TOOL_CATEGORIES } from '../constants/tool-categories';
+import { ScrollView } from 'react-native';
+
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -18,102 +21,99 @@ export default function HomeScreen() {
   const { colors: Colors, favorites, toggleFavorite, isUpdateAvailable } = useApp();
   const styles = getStyles(Colors);
 
-  useEffect(() => {
-    const checkAppOpenCount = async () => {
-      if (DEV_MODE) {
-        setRatingVisible(true);
-        return;
-      }
+  // Flatten all tools for favorites
+  const allTools = TOOL_CATEGORIES.flatMap(cat => cat.tools.map(tool => ({
+    ...tool,
+    category: cat.key,
+    categoryName: cat.name,
+    icon: cat.icon,
+    color: Colors.cardBg
+  })));
+  const favoriteItems = allTools.filter(item => favorites.includes(item.key));
 
-      try {
-        const ratingDone = await AsyncStorage.getItem('rating_done');
-        if (ratingDone === 'true') return;
+  return (
+    <View style={[styles.container, { paddingTop: insets.top }]}> 
+      <View style={styles.header}>
+        <View style={styles.headerRow}>
+          <View>
+            <Text style={styles.headerTitle}>OneCalc</Text>
+            <Text style={styles.headerSubtitle}>All-in-one Calculator Suite</Text>
+          </View>
+          <TouchableOpacity style={styles.settingsBtn} onPress={() => setSettingsVisible(true)}>
+            <MaterialCommunityIcons name="cog" size={28} color={Colors.text} />
+            {isUpdateAvailable && <View style={styles.notifBadge} />}
+          </TouchableOpacity>
+        </View>
+      </View>
 
-        const countStr = await AsyncStorage.getItem('app_open_count') || '0';
-        let count = parseInt(countStr, 10);
-        count += 1;
-        await AsyncStorage.setItem('app_open_count', count.toString());
+      <ScrollView style={{ flex: 1, backgroundColor: Colors.background }} contentContainerStyle={{ padding: 16 }}>
+        <Text style={{ fontSize: 28, fontWeight: 'bold', color: Colors.text, marginBottom: 24 }}>Categories</Text>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+          {TOOL_CATEGORIES.map(cat => (
+            <TouchableOpacity
+              key={cat.key}
+              style={{
+                width: '47%',
+                aspectRatio: 1.2,
+                backgroundColor: Colors.cardBg,
+                borderRadius: 16,
+                marginBottom: 16,
+                alignItems: 'center',
+                justifyContent: 'center',
+                elevation: 2
+              }}
+              onPress={() => router.push(`/category/${cat.key}`)}
+            >
+              <Text style={{ fontSize: 40, marginBottom: 8 }}>{cat.icon}</Text>
+              <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{cat.name}</Text>
+              <Text style={{ fontSize: 12, color: Colors.text, opacity: 0.6, marginTop: 4 }}>{cat.tools.length} tools</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-        if (count === 3) {
-          const ratingLater = await AsyncStorage.getItem('rating_later');
-          if (ratingLater !== 'true') {
-            setRatingVisible(true);
-          }
-        }
-      } catch (e) {
-        console.error('Error checking open count:', e);
-      }
-    };
-
-    checkAppOpenCount();
-  }, []);
-
-  const FEATURES = [
-    { id: '1', route: '/calculators/basic', title: 'Basic Calc', desc: 'Standard operations', icon: 'calculator', color: Colors.tools.basic.btn },
-    { id: '2', route: '/calculators/scientific', title: 'Scientific Calc', desc: 'Advanced math', icon: 'function-variant', color: Colors.tools.scientific.btn },
-    { id: '3', route: '/calculators/currency', title: 'Currency', desc: 'Live exchange rates', icon: 'currency-usd', color: Colors.tools.currency.btn },
-    { id: '4', route: '/calculators/emi', title: 'EMI Calculator', desc: 'Loan payments', icon: 'bank', color: Colors.tools.emi.btn },
-    { id: '5', route: '/calculators/gst', title: 'GST Calc', desc: 'Indian tax slabs', icon: 'receipt', color: Colors.tools.gst.btn },
-    { id: '6', route: '/calculators/interest', title: 'Interest Calc', desc: 'Simple & Compound', icon: 'chart-line', color: Colors.tools.interest.btn },
-    { id: '7', route: '/calculators/age', title: 'Age / Date', desc: 'Duration & differences', icon: 'calendar-heart', color: Colors.tools.age.btn },
-    { id: '8', route: '/calculators/split', title: 'Bill Splitter', desc: 'Split with friends', icon: 'account-group', color: Colors.tools.split.btn },
-    { id: '9', route: '/calculators/unit', title: 'Unit Converter', desc: 'Length, weight, temp', icon: 'swap-horizontal', color: Colors.tools.unit.btn },
-    { id: '10', route: '/calculators/discount', title: 'Discount', desc: 'Final price & savings', icon: 'sale', color: Colors.tools.discount.btn },
-    { id: '11', route: '/calculators/bases', title: 'Number Bases', desc: 'Bin, Dec, Oct, Hex', icon: 'code-tags', color: Colors.tools.bases.btn },
-    { id: '12', route: '/calculators/shapes', title: 'Area & Volume', desc: '2D/3D dimensions', icon: 'shape', color: Colors.tools.shapes.btn },
-  ];
-
-  const favoriteItems = FEATURES.filter(item => favorites.includes(item.id));
-
-  const renderItem = ({ item }: { item: typeof FEATURES[0] }) => {
-    const isFav = favorites.includes(item.id);
-    return (
-      <TouchableOpacity
-        style={styles.card}
-        activeOpacity={0.8}
-        onPress={() => router.push(item.route as any)}
-            <ScrollView style={{ flex: 1, backgroundColor: Colors.background }} contentContainerStyle={{ padding: 16 }}>
-              <Text style={{ fontSize: 28, fontWeight: 'bold', color: Colors.text, marginBottom: 24 }}>Categories</Text>
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-                {TOOL_CATEGORIES.map(cat => (
-                  <TouchableOpacity
-                    key={cat.key}
-                    style={{
-                      width: '47%',
-                      aspectRatio: 1.2,
-                      backgroundColor: Colors.cardBg,
-                      borderRadius: 16,
-                      marginBottom: 16,
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      elevation: 2
-                    }}
-                    onPress={() => router.push(`/category/${cat.key}`)}
-                  >
-                    <Text style={{ fontSize: 40, marginBottom: 8 }}>{cat.icon}</Text>
-                    <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{cat.name}</Text>
-                    <Text style={{ fontSize: 12, color: Colors.text, opacity: 0.6, marginTop: 4 }}>{cat.tools.length} tools</Text>
+        {favoriteItems.length > 0 && (
+          <View style={styles.favSection}>
+            <Text style={styles.sectionHeader}>FAVORITES</Text>
+            <FlatList
+              data={favoriteItems}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(item) => `fav-${item.key}`}
+              contentContainerStyle={{ gap: 12, paddingVertical: 10 }}
+              renderItem={({ item }) => (
+                <TouchableOpacity style={styles.favItem} activeOpacity={0.8} onPress={() => router.push(`/tool/${item.key}`)}>
+                  <TouchableOpacity style={styles.starBtnFav} onPress={() => toggleFavorite(item.key)}>
+                    <MaterialCommunityIcons name="star" size={18} color="#FFD60A" />
                   </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
-          favoriteItems.length > 0 ? (
-            <View style={styles.favSection}>
-              <Text style={styles.sectionHeader}>FAVORITES</Text>
-              <FlatList
-                data={favoriteItems}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => `fav-${item.id}`}
-                contentContainerStyle={{ gap: 12, paddingVertical: 10 }}
-                renderItem={({ item }) => (
-                  <TouchableOpacity style={styles.favItem} activeOpacity={0.8} onPress={() => router.push(item.route as any)}>
-                    <TouchableOpacity style={styles.starBtnFav} onPress={() => toggleFavorite(item.id)}>
-                      <MaterialCommunityIcons name="star" size={18} color="#FFD60A" />
-                    </TouchableOpacity>
-                    <View style={[styles.iconContainerFav, { backgroundColor: item.color + '15' }]}>
-                      <MaterialCommunityIcons name={item.icon as any} size={24} color={item.color} />
-                    </View>
+                  <View style={[styles.iconContainerFav, { backgroundColor: Colors.cardBg + '15' }]}> 
+                    <Text style={{ fontSize: 24 }}>{item.icon}</Text>
+                  </View>
+                  <Text style={styles.favTitle} numberOfLines={1}>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <View style={styles.divider} />
+            <Text style={[styles.sectionHeader, { marginTop: 10 }]}>ALL TOOLS</Text>
+          </View>
+        )}
+
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>Made with ❤️ in India</Text>
+          <Text style={styles.footerText}>Made by Darshan Satbhai</Text>
+        </View>
+      </ScrollView>
+
+      <SettingsModal 
+        visible={settingsVisible} 
+        onClose={() => setSettingsVisible(false)} 
+        onOpenRating={() => {
+          setSettingsVisible(false);
+          setTimeout(() => setRatingVisible(true), 300);
+        }}
+      />
+      <RatingModal visible={ratingVisible} onClose={() => setRatingVisible(false)} />
+    </View>
+  );
                     <Text style={styles.favTitle} numberOfLines={1}>{item.title}</Text>
                   </TouchableOpacity>
                 )}
