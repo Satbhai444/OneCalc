@@ -72,47 +72,31 @@ export default function HomeScreen() {
         style={styles.card}
         activeOpacity={0.8}
         onPress={() => router.push(item.route as any)}
-      >
-        <TouchableOpacity style={styles.starBtn} onPress={() => toggleFavorite(item.id)}>
-          <MaterialCommunityIcons name={isFav ? "star" : "star-outline"} size={22} color={isFav ? "#FFD60A" : "#B0C4DF"} />
-        </TouchableOpacity>
-        <View style={[styles.iconContainer, { backgroundColor: item.color + '15' }]}>
-          <MaterialCommunityIcons name={item.icon as any} size={30} color={item.color} />
-        </View>
-        <Text style={styles.cardTitle}>{item.title}</Text>
-        <Text style={styles.cardDesc} numberOfLines={1}>{item.desc}</Text>
-      </TouchableOpacity>
-    );
-  };
-
-  return (
-    <View style={[styles.container, { paddingTop: insets.top, paddingBottom: insets.bottom }]}>
-      <View style={styles.header}>
-        <View style={styles.headerRow}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-            <Image source={require('../assets/images/icon.png')} style={{ width: 36, height: 36, borderRadius: 8 }} />
-            <View>
-              <Text style={styles.headerTitle}>OneCalc</Text>
-              <Text style={styles.headerSubtitle}>Choose a tool</Text>
-            </View>
-          </View>
-          <TouchableOpacity style={styles.settingsBtn} onPress={() => setSettingsVisible(true)} activeOpacity={0.7}>
-            <View>
-              <MaterialCommunityIcons name="cog" size={28} color={Colors.text} />
-              {isUpdateAvailable && <View style={styles.notifBadge} />}
-            </View>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <FlatList
-        data={FEATURES}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={2}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-        ListHeaderComponent={() => (
+            <ScrollView style={{ flex: 1, backgroundColor: Colors.background }} contentContainerStyle={{ padding: 16 }}>
+              <Text style={{ fontSize: 28, fontWeight: 'bold', color: Colors.text, marginBottom: 24 }}>Categories</Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+                {TOOL_CATEGORIES.map(cat => (
+                  <TouchableOpacity
+                    key={cat.key}
+                    style={{
+                      width: '47%',
+                      aspectRatio: 1.2,
+                      backgroundColor: Colors.cardBg,
+                      borderRadius: 16,
+                      marginBottom: 16,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      elevation: 2
+                    }}
+                    onPress={() => router.push(`/category/${cat.key}`)}
+                  >
+                    <Text style={{ fontSize: 40, marginBottom: 8 }}>{cat.icon}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{cat.name}</Text>
+                    <Text style={{ fontSize: 12, color: Colors.text, opacity: 0.6, marginTop: 4 }}>{cat.tools.length} tools</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
           favoriteItems.length > 0 ? (
             <View style={styles.favSection}>
               <Text style={styles.sectionHeader}>FAVORITES</Text>
