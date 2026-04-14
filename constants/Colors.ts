@@ -1,52 +1,56 @@
 export const LightTheme = {
-  background: '#F8FAFC',
-  primary: '#0A1F44',
-  accent: '#4A90D9',
-  text: '#0A1F44',
-  textMuted: '#7A9BB5',
+  background: '#F8F9FA',
+  primary: '#AB3500', // OneCalc Brand Orange
+  secondary: '#7726E0', // Deep Purple
+  accent: '#FF6B35', // Vibrant Orange
+  text: '#191C1D',
+  textMuted: '#596062',
   cardBg: '#FFFFFF',
-  border: '#D8E4F0',
+  border: '#E1E3E4',
+  surface: '#FFFFFF',
   white: '#FFFFFF',
 
   tools: {
-    basic: { screen: '#F2F2F7', num: '#FFFFFF', fn: '#D4D4D4', op: '#D4D4D4', eq: '#0D1B2A', display: '#0D1B2A', btn: '#D4D4D4' },
-    scientific: { screen: '#FFFFFF', num: '#FFFFFF', fn: '#E0EAFF', op: '#0077FF', eq: '#0D1B2A', display: '#0077FF', btn: '#0077FF' },
-    currency: { screen: '#F0FFF5', num: '#FFFFFF', fn: '#C8F0D0', op: '#00C853', eq: '#0D1B2A', display: '#00C853', btn: '#00C853' },
-    emi: { screen: '#FFF8F0', num: '#FFFFFF', fn: '#FFE0B2', op: '#FF8F00', eq: '#0D1B2A', display: '#FF8F00', btn: '#FF8F00' },
-    gst: { screen: '#FFFFFF', num: '#FFFFFF', fn: '#FFE0CC', op: '#FF6B00', eq: '#0D1B2A', display: '#FF6B00', btn: '#FF6B00' },
-    interest: { screen: '#FFFBE8', num: '#FFFFFF', fn: '#FFF0B3', op: '#FFB300', eq: '#0D1B2A', display: '#C8860A', btn: '#FFB300' },
-    age: { screen: '#FFF0F5', num: '#FFFFFF', fn: '#FFD6E8', op: '#FF6B9D', eq: '#0D1B2A', display: '#FF6B9D', btn: '#FF6B9D' },
-    split: { screen: '#F5EEFF', num: '#FFFFFF', fn: '#E8D5FF', op: '#7C4DFF', eq: '#0D1B2A', display: '#7C4DFF', btn: '#7C4DFF' },
-    unit: { screen: '#E8F6FF', num: '#FFFFFF', fn: '#C8E8F8', op: '#00BCD4', eq: '#0D1B2A', display: '#0097A7', btn: '#00BCD4' },
-    discount: { screen: '#FFE8E8', num: '#FFFFFF', fn: '#FFD0D0', op: '#FF1744', eq: '#0D1B2A', display: '#FF1744', btn: '#FF1744' },
-    bases: { screen: '#EDE8FF', num: '#FFFFFF', fn: '#D8CCFF', op: '#6200EA', eq: '#FFFFFF', display: '#6200EA', btn: '#6200EA' },
-    shapes: { screen: '#E8FFF8', num: '#FFFFFF', fn: '#C8F0E8', op: '#00897B', eq: '#0D1B2A', display: '#00695C', btn: '#00897B' },
+    basic: { screen: '#F8F9FA', num: '#FFFFFF', fn: '#EDEEEF', op: '#E1E3E4', eq: '#AB3500', display: '#191C1D', btn: '#EDEEEF' },
+    scientific: { screen: '#FFFFFF', num: '#FFFFFF', fn: '#E1EFFE', op: '#005AC2', eq: '#AB3500', display: '#005AC2', btn: '#E1EFFE' },
+    currency: { screen: '#F0FFF5', num: '#FFFFFF', fn: '#D1FAE5', op: '#00A86B', eq: '#AB3500', display: '#00A86B', btn: '#D1FAE5' },
+    emi: { screen: '#FFF8F0', num: '#FFFFFF', fn: '#FFEDD5', op: '#FF6B35', eq: '#AB3500', display: '#FF6B35', btn: '#FFEDD5' },
+    gst: { screen: '#FFFFFF', num: '#FFFFFF', fn: '#FFEDD5', op: '#AB3500', eq: '#191C1D', display: '#AB3500', btn: '#FFEDD5' },
+    interest: { screen: '#FFFBF0', num: '#FFFFFF', fn: '#FEF3C7', op: '#D97706', eq: '#AB3500', display: '#B45309', btn: '#FEF3C7' },
+    age: { screen: '#FFF5F7', num: '#FFFFFF', fn: '#FCE7F3', op: '#DB2777', eq: '#AB3500', display: '#BE185D', btn: '#FCE7F3' },
+    split: { screen: '#F5F3FF', num: '#FFFFFF', fn: '#EDE9FE', op: '#7C3AED', eq: '#AB3500', display: '#6D28D9', btn: '#EDE9FE' },
+    unit: { screen: '#F0F9FF', num: '#FFFFFF', fn: '#E0F2FE', op: '#0284C7', eq: '#AB3500', display: '#0369A1', btn: '#E0F2FE' },
+    discount: { screen: '#FEF2F2', num: '#FFFFFF', fn: '#FEE2E2', op: '#EF4444', eq: '#AB3500', display: '#B91C1C', btn: '#FEE2E2' },
+    bases: { screen: '#F5F3FF', num: '#FFFFFF', fn: '#EDE9FE', op: '#7C3AED', eq: '#FFFFFF', display: '#6D28D9', btn: '#7C3AED' },
+    shapes: { screen: '#F0FDFA', num: '#FFFFFF', fn: '#CCFBF1', op: '#0D9488', eq: '#AB3500', display: '#0F766E', btn: '#CCFBF1' },
   }
 };
 
 export const DarkTheme = {
-  background: '#0F172A', // Slate 900
-  primary: '#F8FAFC',    // Off White / Light text
-  accent: '#38BDF8',    // Lighter Cyan-blue
-  text: '#F8FAFC', 
-  textMuted: '#94A3B8', // Slate 400
-  cardBg: '#1E293B',    // Slate 800
-  border: '#334155',    // Slate 700
+  background: '#191C1D', // Deep charcoal
+  primary: '#FFB59D', // Light Orange for dark mode
+  secondary: '#D5BAFF', // Light Purple for dark mode
+  accent: '#FF6B35',
+  text: '#E1E3E4',
+  textMuted: '#909192',
+  cardBg: '#2E3132', // Surface variant
+  border: '#444748',
+  surface: '#2E3132',
   white: '#FFFFFF',
 
   tools: {
-    basic: { screen: '#1C1C1E', num: '#3A3A3C', fn: '#252525', op: '#252525', eq: '#FFD60A', display: '#FFFFFF', btn: '#252525' },
-    scientific: { screen: '#1C1C1E', num: '#3A3A3C', fn: '#1E3A5F', op: '#0077FF', eq: '#FFD60A', display: '#4FC3F7', btn: '#0077FF' },
-    currency: { screen: '#0D2010', num: '#1E3828', fn: '#162A1E', op: '#00C853', eq: '#FFD60A', display: '#00E676', btn: '#00C853' },
-    emi: { screen: '#1C1400', num: '#2A1E00', fn: '#221800', op: '#FF8F00', eq: '#FFD60A', display: '#FFB300', btn: '#FF8F00' },
-    gst: { screen: '#1C0D00', num: '#2A1500', fn: '#221000', op: '#FF6B00', eq: '#FFD60A', display: '#FF8C42', btn: '#FF6B00' },
-    interest: { screen: '#1C1600', num: '#2A2000', fn: '#221A00', op: '#FFB300', eq: '#FFD60A', display: '#FFD54F', btn: '#FFB300' },
-    age: { screen: '#1C0010', num: '#280018', fn: '#200010', op: '#FF6B9D', eq: '#FFD60A', display: '#FF8FB3', btn: '#FF6B9D' },
-    split: { screen: '#0D0020', num: '#1A0038', fn: '#140030', op: '#7C4DFF', eq: '#FFD60A', display: '#B39DFF', btn: '#7C4DFF' },
-    unit: { screen: '#001820', num: '#002028', fn: '#001820', op: '#00BCD4', eq: '#FFD60A', display: '#4DD0E1', btn: '#00BCD4' },
-    discount: { screen: '#1C0000', num: '#280000', fn: '#200000', op: '#FF1744', eq: '#FFD60A', display: '#FF5252', btn: '#FF1744' },
-    bases: { screen: '#0D0020', num: '#1A0038', fn: '#140030', op: '#6200EA', eq: '#FFFFFF', display: '#CE93D8', btn: '#6200EA' },
-    shapes: { screen: '#001810', num: '#002018', fn: '#001810', op: '#00897B', eq: '#FFD60A', display: '#4DB6AC', btn: '#00897B' },
+    basic: { screen: '#191C1D', num: '#2E3132', fn: '#444748', op: '#444748', eq: '#FFB59D', display: '#E1E3E4', btn: '#444748' },
+    scientific: { screen: '#191C1D', num: '#2E3132', fn: '#004494', op: '#38BDF8', eq: '#FFB59D', display: '#38BDF8', btn: '#004494' },
+    currency: { screen: '#0F1F14', num: '#1A2E20', fn: '#112217', op: '#34D399', eq: '#FFB59D', display: '#34D399', btn: '#112217' },
+    emi: { screen: '#1F190F', num: '#2E261A', fn: '#221D11', op: '#FB923C', eq: '#FFB59D', display: '#FB923C', btn: '#221D11' },
+    gst: { screen: '#1F140F', num: '#2E1E1A', fn: '#221511', op: '#FFB59D', eq: '#E1E3E4', display: '#FFB59D', btn: '#221511' },
+    interest: { screen: '#1F1C0F', num: '#2E2A1A', fn: '#221F11', op: '#FBBF24', eq: '#FFB59D', display: '#FBBF24', btn: '#221F11' },
+    age: { screen: '#1F0F16', num: '#2E1A22', fn: '#221118', op: '#F472B6', eq: '#FFB59D', display: '#F472B6', btn: '#221118' },
+    split: { screen: '#140F1F', num: '#1E1A2E', fn: '#151122', op: '#A78BFA', eq: '#FFB59D', display: '#A78BFA', btn: '#151122' },
+    unit: { screen: '#0F1A1F', num: '#1A272E', fn: '#111D22', op: '#38BDF8', eq: '#FFB59D', display: '#38BDF8', btn: '#111D22' },
+    discount: { screen: '#1F0F0F', num: '#2E1A1A', fn: '#221111', op: '#F87171', eq: '#FFB59D', display: '#F87171', btn: '#221111' },
+    bases: { screen: '#140F1F', num: '#1E1A2E', fn: '#151122', op: '#A78BFA', eq: '#FFFFFF', display: '#A78BFA', btn: '#A78BFA' },
+    shapes: { screen: '#0F1F1C', num: '#1A2E2A', fn: '#112220', op: '#2DD4BF', eq: '#FFB59D', display: '#2DD4BF', btn: '#112220' },
   }
 };
 

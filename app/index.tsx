@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   iconText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 28,
     color: '#FFFFFF',
   },
@@ -116,26 +116,26 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   oneText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 28,
-    color: '#4A90D9', // Soft Blue
+    color: '#FF6B35', // Premium Orange
   },
   calcText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 28,
-    color: '#0A1F44', // Deep Navy
+    color: '#AB3500', // Brand Orange
   },
   tagline: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 12,
-    color: '#0A1F44',
-    letterSpacing: 0.5,
+    color: '#AB3500',
+    letterSpacing: 1.5,
     marginBottom: 24,
   },
   progressBarBg: {
     width: 200,
     height: 6,
-    backgroundColor: '#D8E4F0', // Mist
+    backgroundColor: '#E1E3E4',
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -147,9 +147,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   footerText: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 14,
-    color: '#7A9BB5', // Slate
+    color: '#596062',
     marginTop: 4,
   },
 });

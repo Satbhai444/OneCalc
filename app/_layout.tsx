@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { Colors } from '../constants/Colors';
 import { StatusBar } from 'expo-status-bar';
-import { useFonts, DMSans_400Regular, DMSans_500Medium, DMSans_700Bold } from '@expo-google-fonts/dm-sans';
+import { useFonts, SpaceGrotesk_300Light, SpaceGrotesk_400Regular, SpaceGrotesk_500Medium, SpaceGrotesk_600SemiBold, SpaceGrotesk_700Bold } from '@expo-google-fonts/space-grotesk';
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
 import { AppProvider } from '../context/AppContext';
@@ -10,22 +10,20 @@ import { scheduleHourlyNotifications, scheduleDailyNotifications, triggerUpdateN
 
 SplashScreen.preventAutoHideAsync();
 
-// Notification handler moved to utils/notifications.ts
-
 export default function Layout() {
   const [loaded, error] = useFonts({
-    DMSans_400Regular,
-    DMSans_500Medium,
-    DMSans_700Bold,
+    SpaceGrotesk_300Light,
+    SpaceGrotesk_400Regular,
+    SpaceGrotesk_500Medium,
+    SpaceGrotesk_600SemiBold,
+    SpaceGrotesk_700Bold,
   });
 
   useEffect(() => {
     if (loaded || error) {
       SplashScreen.hideAsync();
-      // Initialize Hourly & Daily notifications on app launch
       scheduleHourlyNotifications();
       scheduleDailyNotifications();
-      // Urgent v1.2.0 Update Alert
       triggerUpdateNotificationV12();
     }
   }, [loaded, error]);

@@ -103,15 +103,15 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   title: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 26,
-    color: '#0A1F44',
+    color: '#191C1D',
     marginBottom: 8,
   },
   subtitle: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 16,
-    color: '#7A9BB5',
+    color: '#596062',
   },
   cardsContainer: {
     flex: 1,
@@ -149,15 +149,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardTitle: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 16,
-    color: '#0A1F44',
+    color: '#191C1D',
     marginBottom: 4,
   },
   cardDesc: {
-    fontFamily: 'DMSans_400Regular',
+    fontFamily: 'SpaceGrotesk_400Regular',
     fontSize: 14,
-    color: '#475569',
+    color: '#596062',
   },
   badgeContainer: {
     alignSelf: 'flex-start',
@@ -168,9 +168,9 @@ const styles = StyleSheet.create({
     marginLeft: 64,
   },
   badgeText: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 12,
-    color: '#7A9BB5',
+    color: '#AB3500',
   },
   btnRow: {
     flexDirection: 'row',
@@ -186,9 +186,9 @@ const styles = StyleSheet.create({
     borderColor: '#D8E4F0',
   },
   skipBtnText: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 14,
-    color: '#7A9BB5',
+    color: '#596062',
   },
   allowBtn: {
     paddingVertical: 10,
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4A90D9',
   },
   allowBtnText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 14,
     color: '#FFFFFF',
   },
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   continueText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 16,
     color: '#FFFFFF',
   }

@@ -1,122 +1,127 @@
-
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { TOOL_CATEGORIES } from '../../constants/tool-categories';
-import { useThemeColor } from '../../hooks/use-theme-color';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { TOOL_CATEGORIES } from '../../constants/tool-categories';
 import { useApp } from '../../context/AppContext';
-import { Colors, LightTheme, DarkTheme } from '../../constants/Colors';
+import { getToolIcon } from '../../utils/icons';
 
-
-export default function CategoryToolsScreen() {
-  const { category } = useLocalSearchParams();
+export default function CategoryScreen() {
+  const { category: categoryId } = useLocalSearchParams();
   const router = useRouter();
-  const bg = useThemeColor({}, 'background');
-  const text = useThemeColor({}, 'text');
-  const card = useThemeColor({}, 'card');
-  const { colors: themeColors, favorites, toggleFavorite, effectiveTheme } = useApp();
+  const insets = useSafeAreaInsets();
+  const { colors: Colors, favorites, toggleFavorite } = useApp();
 
-  // Get category and color mapping
-  const cat = TOOL_CATEGORIES.find(c => c.key === category);
-  if (!cat) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: bg }}>
-        <Text style={{ color: text, fontSize: 18 }}>Category not found.</Text>
-      </View>
-    );
-  }
+  const category = TOOL_CATEGORIES.find(c => c.key === categoryId);
 
-  // Tool color mapping (fallback to card color)
-  const toolColors = themeColors.tools || LightTheme.tools;
-
-  // Icon mapping for tools (add more as needed)
-  const toolIcons: Record<string, string> = {
-    basic: 'calculator',
-    scientific: 'function-variant',
-    currency: 'currency-usd',
-    emi: 'bank',
-    gst: 'receipt',
-    interest: 'chart-line',
-    age: 'calendar-heart',
-    split: 'account-group',
-    unit: 'swap-horizontal',
-    discount: 'sale',
-    bases: 'code-tags',
-    shapes: 'shape',
-    fd: 'cash',
-    tax: 'file-percent',
-    investment: 'chart-bar',
-    mortgage: 'home-currency-usd',
-    'unit-price': 'tag',
-    percentage: 'percent',
-    'percentage-change': 'percent',
-    'split-bill': 'account-multiple',
-    tip: 'cash-fast',
-    'loan-eligibility': 'account-cash',
-    retirement: 'calendar-star',
-    'emi-foreclosure': 'calendar-remove',
-    'emi-date-reminder': 'calendar-clock',
-    'loan-prepayment': 'cash-refund',
-    'gst-reverse': 'receipt-text',
-    'salary-tax-split': 'account-cash',
-    'emi-interest-split': 'chart-pie',
-    // Add more mappings as needed
-  };
+  if (!category) return null;
 
   return (
-    <ScrollView style={{ flex: 1, backgroundColor: bg }} contentContainerStyle={{ padding: 16 }}>
-      <Text style={{ fontSize: 28, fontWeight: 'bold', color: text, marginBottom: 24 }}>{cat.icon} {cat.name}</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-        {cat.tools.map(tool => {
-          // Pick color for this tool
-          const colorObj = toolColors[tool.key] || { btn: card };
-          const cardColor = colorObj.btn || card;
-          const iconName = toolIcons[tool.key] || undefined;
-          const isFav = favorites.includes(tool.key);
-          return (
-            <View
-              key={tool.key}
-              style={{
-                width: '47%',
-                aspectRatio: 1.2,
-                backgroundColor: cardColor,
-                borderRadius: 18,
-                marginBottom: 16,
-                alignItems: 'center',
-                justifyContent: 'center',
-                elevation: 3,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.08,
-                shadowRadius: 8,
-                borderWidth: 1,
-                borderColor: themeColors.border,
-                position: 'relative',
-              }}
-            >
+    <View style={[styles.container, { backgroundColor: Colors.background }]}>
+      {/* Header */}
+      <View style={[styles.header, { paddingTop: insets.top + 20 }]}>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+          <MaterialCommunityIcons name="arrow-left" size={24} color={Colors.text} />
+        </TouchableOpacity>
+        <View style={styles.titleContainer}>
+          <Text style={styles.catEmoji}>{category.icon}</Text>
+          <Text style={[styles.headerTitle, { color: Colors.text }]}>{category.name}</Text>
+        </View>
+      </View>
+
+      <ScrollView 
+        contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 40 }]}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={[styles.subtitle, { color: Colors.textMuted }]}>
+          Showing all {category.tools.length} professional tools in this category.
+        </Text>
+
+        <View style={styles.toolList}>
+          {category.tools.map((tool) => {
+            const isFav = favorites.includes(tool.key);
+            return (
               <TouchableOpacity
-                style={{ position: 'absolute', top: 10, right: 10, zIndex: 10, padding: 4 }}
-                onPress={() => toggleFavorite(tool.key)}
+                key={tool.key}
+                style={[styles.toolCard, { backgroundColor: Colors.cardBg, borderColor: Colors.border }]}
+                onPress={() => router.push(`/calculators/${tool.key}`)}
                 activeOpacity={0.7}
               >
-                <MaterialCommunityIcons name={isFav ? 'star' : 'star-outline'} size={22} color={isFav ? '#FFD60A' : themeColors.textMuted} />
+                <View style={[styles.iconBox, { backgroundColor: Colors.primary + '10' }]}>
+                  <MaterialCommunityIcons name={getToolIcon(tool.key) as any} size={28} color={Colors.primary} />
+                </View>
+                
+                <View style={styles.toolInfo}>
+                  <Text style={[styles.toolName, { color: Colors.text }]}>{tool.name}</Text>
+                  <Text style={[styles.toolDesc, { color: Colors.textMuted }]}>Precision engine enabled</Text>
+                </View>
+
+                <TouchableOpacity 
+                  style={styles.favBtn}
+                  onPress={() => toggleFavorite(tool.key)}
+                >
+                  <MaterialCommunityIcons 
+                    name={isFav ? "bookmark" : "bookmark-outline"} 
+                    size={22} 
+                    color={isFav ? Colors.primary : Colors.textMuted} 
+                  />
+                </TouchableOpacity>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={{ flex: 1, alignItems: 'center', justifyContent: 'center', width: '100%' }}
-                activeOpacity={0.85}
-                onPress={() => router.push(`/tool/${tool.key}`)}
-              >
-                {iconName ? (
-                  <MaterialCommunityIcons name={iconName as any} size={38} color={themeColors.text} style={{ marginBottom: 8 }} />
-                ) : (
-                  <Text style={{ fontSize: 38, marginBottom: 8 }}>{cat.icon}</Text>
-                )}
-                <Text style={{ fontSize: 17, fontWeight: '600', color: themeColors.text, textAlign: 'center', marginBottom: 2 }}>{tool.name}</Text>
-              </TouchableOpacity>
-            </View>
-          );
-        })}
-      </View>
-    </ScrollView>
+            );
+          })}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  header: { 
+    paddingHorizontal: 24, 
+    paddingBottom: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16
+  },
+  backBtn: { 
+    width: 44, 
+    height: 44, 
+    borderRadius: 12, 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    backgroundColor: 'rgba(0,0,0,0.02)' 
+  },
+  titleContainer: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  catEmoji: { fontSize: 24 },
+  headerTitle: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 24 },
+  
+  content: { paddingHorizontal: 24 },
+  subtitle: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 13, marginBottom: 30 },
+  
+  toolList: { gap: 12 },
+  toolCard: { 
+    padding: 16, 
+    borderRadius: 20, 
+    borderWidth: 1, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  iconBox: { 
+    width: 52, 
+    height: 52, 
+    borderRadius: 16, 
+    justifyContent: 'center', 
+    alignItems: 'center' 
+  },
+  toolInfo: { flex: 1, gap: 2 },
+  toolName: { fontFamily: 'SpaceGrotesk_600SemiBold', fontSize: 16 },
+  toolDesc: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 12 },
+  favBtn: { padding: 4 },
+});

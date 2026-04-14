@@ -113,14 +113,14 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   iconText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 28,
     color: '#FFFFFF',
   },
   title: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 24,
-    color: '#0A1F44',
+    color: '#AB3500',
   },
   scrollView: {
     flex: 1,
@@ -135,16 +135,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   termsTitle: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 14,
-    color: '#0A1F44',
+    color: '#191C1D',
     marginBottom: 16,
     letterSpacing: 0.5,
   },
   termsBody: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 14,
-    color: '#475569',
+    color: '#596062',
     marginBottom: 12,
   },
   bulletList: {
@@ -153,15 +153,15 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   bulletItem: {
-    fontFamily: 'DMSans_400Regular',
+    fontFamily: 'SpaceGrotesk_400Regular',
     fontSize: 14,
-    color: '#475569',
+    color: '#596062',
     lineHeight: 22,
   },
   termsFooter: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 13,
-    color: '#7A9BB5',
+    color: '#AB3500',
     marginTop: 10,
     fontStyle: 'italic',
   },
@@ -176,9 +176,9 @@ const styles = StyleSheet.create({
     paddingRight: 20,
   },
   radioText: {
-    fontFamily: 'DMSans_500Medium',
+    fontFamily: 'SpaceGrotesk_500Medium',
     fontSize: 14,
-    color: '#0A1F44',
+    color: '#191C1D',
     flex: 1,
     lineHeight: 20,
   },
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   btnText: {
-    fontFamily: 'DMSans_700Bold',
+    fontFamily: 'SpaceGrotesk_700Bold',
     fontSize: 16,
     color: '#FFFFFF',
   }

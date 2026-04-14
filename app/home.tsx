@@ -1,185 +1,178 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useRef, useEffect } from 'react';
+import { useApp } from '../context/AppContext';
+import { TOOL_CATEGORIES } from '../constants/tool-categories';
 import SettingsModal from '../components/SettingsModal';
 import RatingModal from '../components/RatingModal';
-import { useApp } from '../context/AppContext';
-
-const DEV_MODE = false; // Testing ke liye true rakho // Production mein false kar dena
-
-import { TOOL_CATEGORIES } from '../constants/tool-categories';
-import { ScrollView } from 'react-native';
 
 export default function HomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { colors: Colors, favorites, toggleFavorite } = useApp();
   const [settingsVisible, setSettingsVisible] = useState(false);
   const [ratingVisible, setRatingVisible] = useState(false);
-  const { colors: Colors, favorites, toggleFavorite, isUpdateAvailable } = useApp();
-  const styles = getStyles(Colors);
+  const scrollY = useRef(new Animated.Value(0)).current;
 
-  // Flatten all tools for favorites
-  const allTools = TOOL_CATEGORIES.flatMap(cat => cat.tools.map(tool => ({
-    ...tool,
-    category: cat.key,
-    categoryName: cat.name,
-    icon: cat.icon,
-    color: Colors.cardBg
-  })));
+  // Header Animation
+  const headerHeight = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [140, 90],
+    extrapolate: 'clamp',
+  });
+
+  const headerTitleSize = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [32, 24],
+    extrapolate: 'clamp',
+  });
+
+  // Flatten all tools for quick access/favorites
+  const allTools = TOOL_CATEGORIES.flatMap(cat => 
+    cat.tools.map(tool => ({ ...tool, categoryKey: cat.key, categoryIcon: cat.icon }))
+  );
   const favoriteItems = allTools.filter(item => favorites.includes(item.key));
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}> 
-      <View style={styles.header}>
+    <View style={[styles.container, { backgroundColor: Colors.background }]}>
+      {/* Dynamic Header */}
+      <Animated.View style={[styles.header, { height: headerHeight, paddingTop: insets.top, backgroundColor: Colors.background, borderBottomWidth: scrollY.interpolate({ inputRange: [0, 50], outputRange: [0, 1], extrapolate: 'clamp' }), borderBottomColor: Colors.border }]}>
         <View style={styles.headerRow}>
           <View>
-            <Text style={styles.headerTitle}>OneCalc</Text>
-            <Text style={styles.headerSubtitle}>All-in-one Calculator Suite</Text>
+            <Animated.Text style={[styles.headerTitle, { fontSize: headerTitleSize, color: Colors.text }]}>OneCalc</Animated.Text>
+            <Animated.Text style={[styles.headerSubtitle, { opacity: scrollY.interpolate({ inputRange: [0, 50], outputRange: [1, 0], extrapolate: 'clamp' }), color: Colors.textMuted }]}>Precision & Privacy Portfolio</Animated.Text>
           </View>
-          <TouchableOpacity style={styles.settingsBtn} onPress={() => setSettingsVisible(true)}>
-            <MaterialCommunityIcons name="cog" size={28} color={Colors.text} />
-            {isUpdateAvailable && <View style={styles.notifBadge} />}
-          </TouchableOpacity>
+          <View style={styles.headerActions}>
+            <TouchableOpacity style={[styles.actionBtn, { backgroundColor: Colors.cardBg }]} onPress={() => setSettingsVisible(true)}>
+              <MaterialCommunityIcons name="cog-outline" size={24} color={Colors.text} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </Animated.View>
 
-      <ScrollView style={{ flex: 1, backgroundColor: Colors.background }} contentContainerStyle={{ padding: 16 }}>
-        <Text style={{ fontSize: 28, fontWeight: 'bold', color: Colors.text, marginBottom: 24 }}>Categories</Text>
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-          {TOOL_CATEGORIES.map(cat => {
-            // Assign a unique color for each category card
-            const categoryColors = [
-              '#F9D923', '#00A19D', '#FF6F3C', '#6A2C70', '#3AB795', '#FFB319', '#FF6363', '#3A86FF', '#8338EC', '#FF006E', '#FB5607', '#FFBE0B'
-            ];
-            const color = categoryColors[cat.key.length % categoryColors.length] || Colors.cardBg;
-            // Optionally, map category to icon name
-            const categoryIcons: Record<string, string> = {
-              finance: 'cash-multiple',
-              health: 'heart-pulse',
-              conversion: 'swap-horizontal',
-              math: 'function-variant',
-              'date-time': 'calendar',
-              fun: 'emoticon-happy',
-              utility: 'tools',
-            };
-            const iconName = categoryIcons[cat.key] || undefined;
-            return (
-              <TouchableOpacity
-                key={cat.key}
-                style={{
-                  width: '47%',
-                  aspectRatio: 1.2,
-                  backgroundColor: color,
-                  borderRadius: 18,
-                  marginBottom: 16,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  elevation: 3,
-                  shadowColor: '#000',
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.08,
-                  shadowRadius: 8,
-                  borderWidth: 1,
-                  borderColor: Colors.border,
-                  position: 'relative',
-                }}
-                onPress={() => router.push(`/category/${cat.key}`)}
-                activeOpacity={0.85}
-              >
-                {iconName ? (
-                  <MaterialCommunityIcons name={iconName as any} size={40} color={Colors.text} style={{ marginBottom: 8 }} />
-                ) : (
-                  <Text style={{ fontSize: 40, marginBottom: 8 }}>{cat.icon}</Text>
-                )}
-                <Text style={{ fontSize: 18, fontWeight: '600', color: Colors.text }}>{cat.name}</Text>
-                <Text style={{ fontSize: 12, color: Colors.text, opacity: 0.6, marginTop: 4 }}>{cat.tools.length} tools</Text>
-              </TouchableOpacity>
-            );
-          })}
+      <Animated.ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingTop: 150, paddingBottom: 100, paddingHorizontal: 20 }}
+        onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: scrollY } } }], { useNativeDriver: false })}
+        scrollEventThrottle={16}
+      >
+        {/* Made in India Badge */}
+        <View style={styles.badgeContainer}>
+           <View style={[styles.badge, { borderColor: Colors.border }]}>
+             <Text style={styles.badgeText}>🇮🇳 MADE IN INDIA</Text>
+           </View>
         </View>
 
+        {/* Favorites Section */}
         {favoriteItems.length > 0 && (
-          <View style={styles.favSection}>
-            <Text style={styles.sectionHeader}>FAVORITES</Text>
-            <View>
-              <FlatList
-                data={favoriteItems}
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                keyExtractor={(item) => `fav-${item.key}`}
-                contentContainerStyle={{ gap: 12, paddingVertical: 10 }}
-                renderItem={({ item }) => (
-                  <View style={styles.favItem}>
-                    <TouchableOpacity style={styles.starBtnFav} onPress={() => toggleFavorite(item.key)}>
-                      <MaterialCommunityIcons name="star" size={18} color="#FFD60A" />
-                    </TouchableOpacity>
-                    <TouchableOpacity style={{ flex: 1, alignItems: 'center' }} activeOpacity={0.8} onPress={() => router.push(`/tool/${item.key}`)}>
-                      <View style={[styles.iconContainerFav, { backgroundColor: Colors.cardBg + '15' }]}> 
-                        <Text style={{ fontSize: 24 }}>{item.icon}</Text>
-                      </View>
-                      <Text style={styles.favTitle} numberOfLines={1}>{item.name}</Text>
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            </View>
-            <View style={styles.divider} />
-            <Text style={[styles.sectionHeader, { marginTop: 10 }]}>ALL TOOLS</Text>
+          <View style={styles.section}>
+            <Text style={[styles.sectionTitle, { color: Colors.text }]}>Pinned Tools</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
+              {favoriteItems.map(item => (
+                <TouchableOpacity 
+                  key={item.key} 
+                  style={[styles.favCard, { backgroundColor: Colors.cardBg, borderColor: Colors.border }]}
+                  onPress={() => router.push(`/calculators/${item.key}`)}
+                >
+                  <Text style={styles.favIcon}>{item.categoryIcon}</Text>
+                  <Text style={[styles.favName, { color: Colors.text }]} numberOfLines={1}>{item.name}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
         )}
 
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Made with ❤️ in India</Text>
-          <Text style={styles.footerText}>Made by Darshan Satbhai</Text>
+        {/* Tools Bento Grid */}
+        <Text style={[styles.sectionTitle, { color: Colors.text, marginTop: 24 }]}>Categories</Text>
+        <View style={styles.grid}>
+          {TOOL_CATEGORIES.map((cat, index) => (
+            <TouchableOpacity
+              key={cat.key}
+              style={[
+                styles.catCard,
+                { 
+                  backgroundColor: Colors.cardBg, 
+                  borderColor: Colors.border,
+                  width: index % 3 === 0 ? '100%' : '48%', // Mix of full width and half width for bento look
+                }
+              ]}
+              onPress={() => router.push(`/category/${cat.key}`)}
+            >
+              <View style={[styles.catIconContainer, { backgroundColor: Colors.primary + '10' }]}>
+                <Text style={styles.catIconText}>{cat.icon}</Text>
+              </View>
+              <View>
+                <Text style={[styles.catName, { color: Colors.text }]}>{cat.name}</Text>
+                <Text style={[styles.catCount, { color: Colors.textMuted }]}>{cat.tools.length} Industrial Tools</Text>
+              </View>
+              <MaterialCommunityIcons name="chevron-right" size={20} color={Colors.textMuted} style={styles.chevron} />
+            </TouchableOpacity>
+          ))}
         </View>
-      </ScrollView>
 
-      <SettingsModal 
-        visible={settingsVisible} 
-        onClose={() => setSettingsVisible(false)} 
-        onOpenRating={() => {
-          setSettingsVisible(false);
-          setTimeout(() => setRatingVisible(true), 300);
-        }}
-      />
+        {/* Footer */}
+        <View style={styles.footer}>
+           <Text style={[styles.footerText, { color: Colors.textMuted }]}>Handcrafted for Excellence</Text>
+           <Text style={[styles.footerText, { color: Colors.primary, fontFamily: 'SpaceGrotesk_700Bold' }]}>Darshan Satbhai</Text>
+        </View>
+      </Animated.ScrollView>
+
+      <SettingsModal visible={settingsVisible} onClose={() => setSettingsVisible(false)} />
       <RatingModal visible={ratingVisible} onClose={() => setRatingVisible(false)} />
     </View>
   );
-// Removed duplicate/leftover code after return
 }
 
-const getStyles = (Colors: any) => StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
-  header: { paddingHorizontal: 20, paddingVertical: 16 },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  settingsBtn: { padding: 8 },
-  notifBadge: { position: 'absolute', top: 0, right: 0, width: 10, height: 10, borderRadius: 5, backgroundColor: '#FF3B30', borderWidth: 2, borderColor: '#FFFFFF' },
-  headerTitle: { fontFamily: 'DMSans_700Bold', fontSize: 32, color: Colors.text, letterSpacing: 0.5 },
-  headerSubtitle: { fontFamily: 'DMSans_500Medium', fontSize: 16, color: Colors.textMuted, marginTop: 4 },
-  listContainer: { paddingHorizontal: 12, paddingBottom: 20 },
-  card: {
-    flex: 1, backgroundColor: Colors.cardBg, margin: 8, borderRadius: 18, padding: 16,
-    alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.04, shadowRadius: 8, elevation: 2, borderWidth: 1, borderColor: Colors.border,
-    position: 'relative'
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  header: { 
+    position: 'absolute', 
+    top: 0, 
+    left: 0, 
+    right: 0, 
+    zIndex: 100, 
+    justifyContent: 'center', 
+    paddingHorizontal: 20,
   },
-  iconContainer: { width: 56, height: 56, borderRadius: 28, justifyContent: 'center', alignItems: 'center', marginBottom: 12 },
-  cardTitle: { fontFamily: 'DMSans_700Bold', fontSize: 15, color: Colors.text, textAlign: 'center', marginBottom: 4 },
-  cardDesc: { fontFamily: 'DMSans_400Regular', fontSize: 12, color: Colors.textMuted, textAlign: 'center' },
-  starBtn: { position: 'absolute', top: 12, right: 12, zIndex: 10, padding: 4 },
+  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  headerTitle: { fontFamily: 'SpaceGrotesk_700Bold' },
+  headerSubtitle: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 13, marginTop: -2 },
+  headerActions: { flexDirection: 'row', gap: 10 },
+  actionBtn: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: 'rgba(0,0,0,0.05)' },
   
-  // Favorites
-  favSection: { paddingHorizontal: 8, marginBottom: 16 },
-  sectionHeader: { fontFamily: 'DMSans_700Bold', fontSize: 13, color: Colors.textMuted, letterSpacing: 0.5, marginBottom: 6 },
-  favItem: { width: 110, backgroundColor: Colors.cardBg, borderRadius: 16, padding: 12, alignItems: 'center', borderWidth: 1, borderColor: Colors.border, position: 'relative' },
-  iconContainerFav: { width: 44, height: 44, borderRadius: 22, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-  favTitle: { fontFamily: 'DMSans_700Bold', fontSize: 12, color: Colors.text, textAlign: 'center' },
-  starBtnFav: { position: 'absolute', top: 6, right: 6, zIndex: 10, padding: 2 },
-  divider: { height: 1, backgroundColor: Colors.border, width: '100%', marginTop: 12, marginBottom: 8 },
+  badgeContainer: { marginBottom: 20 },
+  badge: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 100, borderWidth: 1 },
+  badgeText: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 10, letterSpacing: 1 },
 
-  footer: { marginTop: 20, paddingVertical: 20, alignItems: 'center' },
-  footerText: { fontFamily: 'DMSans_500Medium', fontSize: 14, color: Colors.textMuted, marginTop: 4 }
+  section: { marginBottom: 24 },
+  sectionTitle: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 18, marginBottom: 16 },
+  
+  favCard: { width: 120, padding: 16, borderRadius: 20, borderWidth: 1, alignItems: 'center', gap: 8 },
+  favIcon: { fontSize: 24 },
+  favName: { fontFamily: 'SpaceGrotesk_600SemiBold', fontSize: 12, textAlign: 'center' },
+
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between' },
+  catCard: { 
+    padding: 16, 
+    borderRadius: 24, 
+    borderWidth: 1, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    gap: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.02,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  catIconContainer: { width: 50, height: 50, borderRadius: 15, justifyContent: 'center', alignItems: 'center' },
+  catIconText: { fontSize: 24 },
+  catName: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 16 },
+  catCount: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 12 },
+  chevron: { marginLeft: 'auto' },
+
+  footer: { marginTop: 40, alignItems: 'center', gap: 4 },
+  footerText: { fontFamily: 'SpaceGrotesk_500Medium', fontSize: 12, letterSpacing: 0.5 },
 });
