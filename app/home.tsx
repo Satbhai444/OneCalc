@@ -65,13 +65,29 @@ const PinnedToolCard = ({ item, index, scrollX, cardWidth, gap, onPress, Colors 
         { scale },
       ],
       opacity,
+      borderWidth: 2,
+      borderColor: '#FF00FF', // Debug border
     };
+  });
+  // Show rotation value for debug
+  const rotationValue = useAnimatedStyle(() => {
+    const position = index * (cardWidth + gap);
+    const center = scrollX.value + (cardWidth + gap) * 2;
+    const relativeX = position - center;
+    const rotateY = interpolate(
+      relativeX,
+      [-(cardWidth + gap) * 2, 0, (cardWidth + gap) * 2],
+      [75, 0, -75],
+      Extrapolate.CLAMP
+    );
+    return { opacity: 1 };
   });
   return (
     <Animated.View style={[styles.favCard, { backgroundColor: Colors.cardBg, borderColor: Colors.border, marginRight: gap }, animatedStyle]}>
       <TouchableOpacity style={{ alignItems: 'center' }} onPress={onPress}>
         <Text style={styles.favIcon}>{item.categoryIcon}</Text>
         <Text style={[styles.favName, { color: Colors.text }]} numberOfLines={1}>{item.name}</Text>
+        <Animated.Text style={[{ fontSize: 10, color: '#FF00FF', marginTop: 4 }, rotationValue]}>DEBUG: RotY</Animated.Text>
       </TouchableOpacity>
     </Animated.View>
   );
@@ -83,8 +99,8 @@ type AnimatedHorizontalPinnedToolsProps = {
   onItemPress: (item: any) => void;
 };
 const AnimatedHorizontalPinnedTools = ({ items, Colors, onItemPress }: AnimatedHorizontalPinnedToolsProps) => {
-  const cardWidth = 120;
-  const gap = 12;
+  const cardWidth = 180; // Larger card width
+  const gap = 16; // Slightly larger gap
   const scrollX = useSharedValue(0);
   const scrollRef = useAnimatedRef();
   const onScroll = useAnimatedScrollHandler({
@@ -92,6 +108,9 @@ const AnimatedHorizontalPinnedTools = ({ items, Colors, onItemPress }: AnimatedH
       scrollX.value = event?.contentOffset?.x || 0;
     },
   });
+  if (!items || items.length < 3) {
+    return <Text style={{ color: 'red', textAlign: 'center', margin: 20 }}>Add more pinned tools to see the barrel effect!</Text>;
+  }
   return (
     <Animated.ScrollView
       horizontal
@@ -139,13 +158,13 @@ const styles = StyleSheet.create({
   badgeContainer: { marginBottom: 20 },
   badge: { alignSelf: 'flex-start', paddingHorizontal: 12, paddingVertical: 4, borderRadius: 100, borderWidth: 1 },
   badgeText: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 10, letterSpacing: 1 },
-
+  
   section: { marginBottom: 24 },
   sectionTitle: { fontFamily: 'SpaceGrotesk_700Bold', fontSize: 18, marginBottom: 16 },
   
-  favCard: { width: 120, padding: 16, borderRadius: 20, borderWidth: 1, alignItems: 'center', gap: 8 },
-  favIcon: { fontSize: 24 },
-  favName: { fontFamily: 'SpaceGrotesk_600SemiBold', fontSize: 12, textAlign: 'center' },
+  favCard: { width: 180, padding: 28, borderRadius: 28, borderWidth: 1, alignItems: 'center', gap: 12 },
+  favIcon: { fontSize: 40 },
+  favName: { fontFamily: 'SpaceGrotesk_600SemiBold', fontSize: 16, textAlign: 'center' },
 
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between' },
   catCardContainer: { width: '48.2%', marginBottom: 12 },
