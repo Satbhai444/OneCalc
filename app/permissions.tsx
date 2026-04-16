@@ -3,6 +3,7 @@ import { useRouter } from 'expo-router';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
+// TODO: expo-notifications: Remote push notifications not supported in Expo Go as of SDK 53. Use a dev build.
 import * as Notifications from 'expo-notifications';
 
 export default function PermissionsScreen() {

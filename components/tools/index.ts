@@ -59,6 +59,23 @@ import TextCaseConverter from './TextCaseConverter';
 import TextCounter from './TextCounter';
 import RandomNumberGenerator from './RandomNumberGenerator';
 import PasswordStrength from './PasswordStrength';
+import DateDifference from './DateDifference';
+import LeapYearChecker from './LeapYearChecker';
+import AgeOnDate from './AgeOnDate';
+import DayOfWeekFinder from './DayOfWeekFinder';
+import QRGenerator from './QRGenerator';
+import InvoiceGenerator from './InvoiceGenerator';
+import BarcodeGenerator from './BarcodeGenerator';
+import DateAddSub from './DateAddSub';
+import CountdownTimer from './CountdownTimer';
+import WorldClock from './WorldClock';
+import TimeZoneConverter from './TimeZoneConverter';
+import NotificationManager from './NotificationManager';
+import HistoryManager from './HistoryManager';
+import TTSTool from './TTSTool';
+import CurrencyConverter from './CurrencyConverter';
+import EMIDateReminder from './EMIDateReminder';
+import EMIForeclosure from './EMIForeclosure';
 
 export const ToolRegistry: Record<string, React.ComponentType> = {
   emi: EMICalculator,
@@ -122,5 +139,22 @@ export const ToolRegistry: Record<string, React.ComponentType> = {
   'text-counter': TextCounter,
   'random-number': RandomNumberGenerator,
   'password-strength': PasswordStrength,
+  'date-diff': DateDifference,
+  'leap-year': LeapYearChecker,
+  'age-on-date': AgeOnDate,
+  'day-of-week': DayOfWeekFinder,
+  qr: QRGenerator,
+  invoice: InvoiceGenerator,
+  barcode: BarcodeGenerator,
+  'date-add-sub': DateAddSub,
+  countdown: CountdownTimer,
+  'world-clock': WorldClock,
+  'time-zone': TimeZoneConverter,
+  notification: NotificationManager,
+  history: HistoryManager,
+  'tts-stt': TTSTool,
+  currency: CurrencyConverter,
+  'emi-date-reminder': EMIDateReminder,
+  'emi-foreclosure': EMIForeclosure,
   // More will be added here...
 };

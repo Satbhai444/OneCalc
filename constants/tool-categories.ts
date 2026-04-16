@@ -1,5 +1,13 @@
-// Category and tool data for navigation and UI
 export const TOOL_CATEGORIES = [
+  {
+    key: 'essentials',
+    name: 'Essential Tools',
+    icon: '🚀',
+    tools: [
+      { key: 'basic', name: 'Simple Calculator' },
+      { key: 'scientific', name: 'Scientific Calculator' },
+    ]
+  },
   {
     key: 'finance',
     name: 'Finance',
@@ -58,7 +66,6 @@ export const TOOL_CATEGORIES = [
     name: 'Math & Science',
     icon: '🧮',
     tools: [
-      { key: 'scientific', name: 'Scientific Calculator' },
       { key: 'quadratic', name: 'Quadratic Equation Solver' },
       { key: 'prime', name: 'Prime Number Checker' },
       { key: 'roman', name: 'Roman Numeral Converter' },
